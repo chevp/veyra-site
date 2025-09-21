@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veyra ERP - Tailwind Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-800 border-r border-gray-700">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-gray-700">
+                <h1 class="text-xl font-bold text-primary-500">VEYRA ERP</h1>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="mt-6">
+                <div class="px-3">
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" onclick="showPage('dashboard')" class="nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" onclick="showPage('products')" class="nav-link active flex items-center px-3 py-2 text-sm font-medium rounded-md bg-primary-600 text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                </svg>
+                                Produktverwaltung
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" onclick="showPage('product-detail')" class="nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Produktdetails
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" onclick="showPage('timetracking')" class="nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Zeiterfassung
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                Personal
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                                Finanzen
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="h-16 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6">
+                <div class="flex items-center">
+                    <h2 id="page-title" class="text-lg font-semibold text-gray-100">Produktverwaltung</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-400">Max Mustermann</span>
+                    <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-white">MM</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="flex-1 overflow-auto">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page hidden p-6">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-gray-100 mb-6">Dashboard</h3>
+
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-primary-600 rounded-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-400">Gesamtprodukte</p>
+                                        <p class="text-2xl font-semibold text-gray-100">2,847</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-blue-600 rounded-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-400">Monatsumsatz</p>
+                                        <p class="text-2xl font-semibold text-gray-100">€ 125,430</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-yellow-600 rounded-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-400">Aktive Arbeitszeit</p>
+                                        <p class="text-2xl font-semibold text-gray-100">342h</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-red-600 rounded-lg">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <p class="text-sm font-medium text-gray-400">Niedriger Bestand</p>
+                                        <p class="text-2xl font-semibold text-gray-100">23</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Page -->
+                <div id="products-page" class="page p-6">
+                    <div class="mb-6 flex items-center justify-between">
+                        <h3 class="text-2xl font-bold text-gray-100">Produktverwaltung</h3>
+                        <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Neues Produkt
+                        </button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="mb-6 bg-gray-800 rounded-lg p-4 border border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Suche</label>
+                                <input type="text" placeholder="Produktname oder SKU..." class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Kategorie</label>
+                                <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    <option>Alle Kategorien</option>
+                                    <option>Elektronik</option>
+                                    <option>Bürobedarf</option>
+                                    <option>Software</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                                <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    <option>Alle Status</option>
+                                    <option>Aktiv</option>
+                                    <option>Inaktiv</option>
+                                    <option>Ausverkauft</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button class="w-full bg-gray-700 hover:bg-gray-600 text-gray-100 px-4 py-2 rounded-md text-sm font-medium">
+                                    Filter anwenden
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Produkt</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">SKU</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Kategorie</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bestand</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Preis</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Aktionen</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-gray-800 divide-y divide-gray-700">
+                                    <tr class="hover:bg-gray-700">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="h-10 w-10 bg-gray-600 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-100">Dell Laptop XPS 13</div>
+                                                    <div class="text-sm text-gray-400">Premium Business Laptop</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">DELL-XPS13-2025</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Elektronik</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">45</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">€ 1.299,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-300">Aktiv</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button onclick="showPage('product-detail')" class="text-primary-400 hover:text-primary-300 mr-3">Bearbeiten</button>
+                                            <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="h-10 w-10 bg-gray-600 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-100">Logitech MX Master 3</div>
+                                                    <div class="text-sm text-gray-400">Wireless Mouse</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">LOGI-MX3-2025</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Elektronik</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">128</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">€ 89,99</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-300">Aktiv</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button onclick="showPage('product-detail')" class="text-primary-400 hover:text-primary-300 mr-3">Bearbeiten</button>
+                                            <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="h-10 w-10 bg-gray-600 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-100">Microsoft Office 365</div>
+                                                    <div class="text-sm text-gray-400">Business License</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">MSFT-O365-BUS</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Software</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">∞</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">€ 12,50/Monat</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-900 text-green-300">Aktiv</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button onclick="showPage('product-detail')" class="text-primary-400 hover:text-primary-300 mr-3">Bearbeiten</button>
+                                            <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="h-10 w-10 bg-gray-600 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-100">Ergonomic Office Chair</div>
+                                                    <div class="text-sm text-gray-400">Premium Workspace</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">CHAIR-ERG-001</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">Bürobedarf</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-sm text-red-400 font-medium">8</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">€ 459,00</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-900 text-yellow-300">Niedriger Bestand</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button onclick="showPage('product-detail')" class="text-primary-400 hover:text-primary-300 mr-3">Bearbeiten</button>
+                                            <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-6 flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            Zeige 1 bis 4 von 2,847 Einträgen
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600">Zurück</button>
+                            <button class="px-3 py-2 text-sm bg-primary-600 text-white rounded-md">1</button>
+                            <button class="px-3 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600">2</button>
+                            <button class="px-3 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600">3</button>
+                            <button class="px-3 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600">Weiter</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Detail Page -->
+                <div id="product-detail-page" class="page hidden p-6">
+                    <div class="mb-6 flex items-center justify-between">
+                        <div class="flex items-center">
+                            <button onclick="showPage('products')" class="mr-4 p-2 text-gray-400 hover:text-gray-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </button>
+                            <h3 class="text-2xl font-bold text-gray-100">Produktdetails - Dell Laptop XPS 13</h3>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-gray-100 px-4 py-2 rounded-md text-sm font-medium">
+                                Duplizieren
+                            </button>
+                            <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                Speichern
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Product Image -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                                <div class="aspect-square bg-gray-700 rounded-lg flex items-center justify-center mb-4">
+                                    <svg class="w-24 h-24 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                                    </svg>
+                                </div>
+                                <button class="w-full bg-gray-700 hover:bg-gray-600 text-gray-100 px-4 py-2 rounded-md text-sm font-medium">
+                                    Bild hochladen
+                                </button>
+                            </div>
+
+                            <!-- Quick Stats -->
+                            <div class="mt-6 bg-gray-800 rounded-lg border border-gray-700 p-6">
+                                <h4 class="text-lg font-medium text-gray-100 mb-4">Statistiken</h4>
+                                <div class="space-y-4">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Verkäufe (30 Tage)</span>
+                                        <span class="text-gray-100 font-medium">23</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Umsatz (30 Tage)</span>
+                                        <span class="text-gray-100 font-medium">€ 29.877</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Durchschnittsbewertung</span>
+                                        <span class="text-gray-100 font-medium">4.8/5</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Letzte Bestellung</span>
+                                        <span class="text-gray-100 font-medium">Heute</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Details Form -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Basic Information -->
+                                    <div class="md:col-span-2">
+                                        <h4 class="text-lg font-medium text-gray-100 mb-4">Grundinformationen</h4>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Produktname</label>
+                                        <input type="text" value="Dell Laptop XPS 13" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">SKU</label>
+                                        <input type="text" value="DELL-XPS13-2025" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Kategorie</label>
+                                        <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                            <option>Elektronik</option>
+                                            <option>Bürobedarf</option>
+                                            <option>Software</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Status</label>
+                                        <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                            <option>Aktiv</option>
+                                            <option>Inaktiv</option>
+                                            <option>Ausverkauft</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Beschreibung</label>
+                                        <textarea rows="4" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Produktbeschreibung...">Premium Business Laptop mit hochauflösendem Display, Intel Core i7 Prozessor und 16GB RAM. Ideal für professionelle Anwendungen und mobile Arbeit.</textarea>
+                                    </div>
+
+                                    <!-- Pricing -->
+                                    <div class="md:col-span-2 pt-6 border-t border-gray-700">
+                                        <h4 class="text-lg font-medium text-gray-100 mb-4">Preisgestaltung</h4>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Verkaufspreis (€)</label>
+                                        <input type="number" value="1299.00" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Einkaufspreis (€)</label>
+                                        <input type="number" value="899.00" step="0.01" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Marge (%)</label>
+                                        <input type="number" value="30.79" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-600 rounded-md text-gray-400">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">MwSt. (%)</label>
+                                        <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                            <option>19</option>
+                                            <option>7</option>
+                                            <option>0</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Inventory -->
+                                    <div class="md:col-span-2 pt-6 border-t border-gray-700">
+                                        <h4 class="text-lg font-medium text-gray-100 mb-4">Lagerbestand</h4>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Aktueller Bestand</label>
+                                        <input type="number" value="45" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Mindestbestand</label>
+                                        <input type="number" value="10" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Lagerort</label>
+                                        <input type="text" value="Regal A-15" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Lieferant</label>
+                                        <select class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                            <option>Dell Technologies</option>
+                                            <option>HP Inc.</option>
+                                            <option>Lenovo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Tracking Page -->
+                <div id="timetracking-page" class="page hidden p-6">
+                    <div class="mb-6">
+                        <h3 class="text-2xl font-bold text-gray-100 mb-2">Zeiterfassung</h3>
+                        <p class="text-gray-400">Verwalten Sie Arbeitszeiten und Projektaktivitäten</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Time Clock -->
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                                <h4 class="text-lg font-medium text-gray-100 mb-6">Zeitstempel</h4>
+
+                                <!-- Current Time Display -->
+                                <div class="text-center mb-6">
+                                    <div id="current-time" class="text-3xl font-mono text-primary-500 mb-2">15:42:33</div>
+                                    <div class="text-sm text-gray-400">Freitag, 21. September 2025</div>
+                                </div>
+
+                                <!-- Clock In/Out Buttons -->
+                                <div class="space-y-4">
+                                    <button id="clock-in-btn" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-md text-sm font-medium">
+                                        ✓ Eingestempelt um 08:30
+                                    </button>
+                                    <button id="clock-out-btn" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-md text-sm font-medium">
+                                        Ausstempeln
+                                    </button>
+                                </div>
+
+                                <!-- Break Timer -->
+                                <div class="mt-6 pt-6 border-t border-gray-700">
+                                    <h5 class="text-sm font-medium text-gray-300 mb-3">Pause</h5>
+                                    <div class="flex space-x-2">
+                                        <button class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-md text-sm font-medium">
+                                            Pause starten
+                                        </button>
+                                        <button class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-100 px-3 py-2 rounded-md text-sm font-medium" disabled>
+                                            Pause beenden
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Today's Summary -->
+                                <div class="mt-6 pt-6 border-t border-gray-700">
+                                    <h5 class="text-sm font-medium text-gray-300 mb-3">Heute</h5>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Arbeitszeit:</span>
+                                            <span class="text-gray-100 font-medium">7h 12m</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Pausen:</span>
+                                            <span class="text-gray-100 font-medium">45m</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-400">Überstunden:</span>
+                                            <span class="text-green-400 font-medium">+0h 12m</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Time Entries -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h4 class="text-lg font-medium text-gray-100">Zeiteinträge</h4>
+                                    <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                        + Manueller Eintrag
+                                    </button>
+                                </div>
+
+                                <!-- Date Filter -->
+                                <div class="mb-6">
+                                    <div class="flex space-x-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Von</label>
+                                            <input type="date" value="2025-09-15" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Bis</label>
+                                            <input type="date" value="2025-09-21" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-300 mb-2">Projekt</label>
+                                            <select class="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                                <option>Alle Projekte</option>
+                                                <option>Veyra ERP</option>
+                                                <option>Website Redesign</option>
+                                                <option>Mobile App</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Time Entries Table -->
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-700">
+                                        <thead>
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Datum</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Start</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Ende</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Pause</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Gesamt</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Projekt</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Bemerkung</th>
+                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Aktionen</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-700">
+                                            <tr class="hover:bg-gray-700">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">21.09.2025</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">08:30</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-primary-400">Aktiv</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">45m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">7h 12m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">Veyra ERP</td>
+                                                <td class="px-4 py-4 text-sm text-gray-300">Frontend Entwicklung</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button class="text-primary-400 hover:text-primary-300 mr-2">Bearbeiten</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-700">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">20.09.2025</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">09:00</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">17:30</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">30m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">8h 00m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">Website Redesign</td>
+                                                <td class="px-4 py-4 text-sm text-gray-300">UI/UX Design Review</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button class="text-primary-400 hover:text-primary-300 mr-2">Bearbeiten</button>
+                                                    <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-700">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">19.09.2025</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">08:45</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">16:45</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">1h 00m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">7h 00m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">Mobile App</td>
+                                                <td class="px-4 py-4 text-sm text-gray-300">API Integration</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button class="text-primary-400 hover:text-primary-300 mr-2">Bearbeiten</button>
+                                                    <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-700">
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">18.09.2025</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">09:15</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">17:15</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">45m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">7h 15m</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-300">Veyra ERP</td>
+                                                <td class="px-4 py-4 text-sm text-gray-300">Backend Testing</td>
+                                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button class="text-primary-400 hover:text-primary-300 mr-2">Bearbeiten</button>
+                                                    <button class="text-red-400 hover:text-red-300">Löschen</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Weekly Summary -->
+                                <div class="mt-6 pt-6 border-t border-gray-700">
+                                    <h5 class="text-sm font-medium text-gray-300 mb-4">Wochenzusammenfassung</h5>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-gray-100">29h 27m</div>
+                                            <div class="text-sm text-gray-400">Gesamtarbeitszeit</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-green-400">+1h 27m</div>
+                                            <div class="text-sm text-gray-400">Überstunden</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-gray-100">3h 00m</div>
+                                            <div class="text-sm text-gray-400">Pausen</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-primary-500">95%</div>
+                                            <div class="text-sm text-gray-400">Produktivität</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('de-DE');
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+                page.classList.remove('block');
+            });
+
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.remove('hidden');
+            document.getElementById(pageId + '-page').classList.add('block');
+
+            // Update navigation active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'bg-primary-600', 'text-white');
+                link.classList.add('text-gray-300', 'hover:bg-gray-700', 'hover:text-white');
+            });
+
+            // Set active navigation item
+            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active', 'bg-primary-600', 'text-white');
+                activeLink.classList.remove('text-gray-300', 'hover:bg-gray-700', 'hover:text-white');
+            }
+
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'products': 'Produktverwaltung',
+                'product-detail': 'Produktdetails',
+                'timetracking': 'Zeiterfassung'
+            };
+            document.getElementById('page-title').textContent = titles[pageId] || 'Veyra ERP';
+        }
+
+        // Clock in/out functionality
+        document.getElementById('clock-in-btn').addEventListener('click', function() {
+            // Simulate clock out
+            this.textContent = '⏰ Ausstempeln um ' + new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+            this.className = 'w-full bg-gray-600 text-gray-300 px-4 py-3 rounded-md text-sm font-medium cursor-not-allowed';
+            this.disabled = true;
+
+            document.getElementById('clock-out-btn').className = 'w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-md text-sm font-medium';
+            document.getElementById('clock-out-btn').disabled = false;
+        });
+
+        document.getElementById('clock-out-btn').addEventListener('click', function() {
+            // Simulate clock in for next day
+            document.getElementById('clock-in-btn').textContent = 'Einstempeln';
+            document.getElementById('clock-in-btn').className = 'w-full bg-primary-600 hover:bg-primary-700 text-white px-4 py-3 rounded-md text-sm font-medium';
+            document.getElementById('clock-in-btn').disabled = false;
+
+            this.className = 'w-full bg-gray-600 text-gray-300 px-4 py-3 rounded-md text-sm font-medium cursor-not-allowed';
+            this.disabled = true;
+        });
+
+        // Initialize with products page
+        showPage('products');
+    </script>
+</body>
+</html>
