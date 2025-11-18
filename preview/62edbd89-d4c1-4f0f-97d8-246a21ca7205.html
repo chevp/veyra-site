@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventHub - Professional Event Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            arctic: {
+              50: '#fdf4ff',
+              100: '#fae8ff',
+              200: '#f5d0fe',
+              300: '#f0abfc',
+              400: '#e879f9',
+              500: '#d946ef',
+              600: '#c026d3',
+              700: '#a21caf',
+              800: '#86198f',
+              900: '#701a75',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .diagonal-stripes {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(217, 70, 239, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(217, 70, 239, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(217, 70, 239, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(217, 70, 239, 0.5);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #e879f9 0%, #d946ef 50%, #c026d3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .panel-shadow {
+      box-shadow:
+        0 4px 6px -1px rgba(217, 70, 239, 0.1),
+        0 2px 4px -1px rgba(217, 70, 239, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .hover-glow {
+      transition: all 0.3s ease;
+    }
+
+    .hover-glow:hover {
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .drag-handle {
+      cursor: grab;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .tab-active {
+      background: rgba(217, 70, 239, 0.2);
+      border-bottom: 2px solid #d946ef;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .panel-content {
+      font-size: 0.75rem;
+    }
+
+    .property-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .property-label {
+      color: #94a3b8;
+      font-size: 0.7rem;
+    }
+
+    .property-value {
+      color: #e879f9;
+      font-size: 0.7rem;
+      font-family: monospace;
+    }
+
+    .section-header {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 0.75rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.375rem;
+      padding: 0.375rem 0.5rem;
+      font-size: 0.7rem;
+      color: #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #d946ef;
+      background: rgba(217, 70, 239, 0.1);
+    }
+
+    .form-checkbox {
+      width: 1rem;
+      height: 1rem;
+      cursor: pointer;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-planning {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-confirmed {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-inprogress {
+      background: rgba(234, 179, 8, 0.2);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .status-completed {
+      background: rgba(168, 85, 247, 0.2);
+      color: #a78bfa;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .status-cancelled {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .context-menu {
+      position: fixed;
+      z-index: 10000;
+      min-width: 280px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .context-menu.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .context-menu-item {
+      transition: all 0.2s ease;
+    }
+
+    .context-menu-item:hover {
+      background: rgba(217, 70, 239, 0.15);
+      transform: translateX(2px);
+    }
+
+    .search-highlight {
+      background: rgba(234, 179, 8, 0.3);
+      color: #fef08a;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 overflow-hidden h-screen">
+  <!-- Main Container -->
+  <div class="h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside class="w-20 glass border-r border-slate-700/50 flex flex-col items-center py-6 gap-4 diagonal-stripes">
+      <!-- Logo -->
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 hover-glow cursor-pointer">
+        <span class="material-symbols-outlined text-white text-2xl">event</span>
+      </div>
+
+      <!-- Module Icons -->
+      <div class="flex flex-col gap-3 flex-1">
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative bg-purple-500/20">
+          <span class="material-symbols-outlined text-purple-400">home</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Dashboard
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-yellow-400">lightbulb</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Lighting
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-blue-400">volume_up</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Audio
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-green-400">restaurant</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Catering
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-orange-400">groups</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Personnel
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-red-400">schedule</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Timeline
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-cyan-400">location_on</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Venue
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-pink-400">inventory_2</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Inventory
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-lime-400">local_shipping</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Vehicles
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-indigo-400">chat</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Communications
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="flex flex-col gap-3">
+        <div class="w-0.5 h-8 bg-slate-700/50 mx-auto"></div>
+        <button class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-slate-400">settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Bar -->
+      <header class="h-16 glass border-b border-slate-700/50 flex items-center justify-between px-6 diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-bold gradient-text">Corporate Annual Summit 2025</h1>
+          <div class="h-6 w-px bg-slate-700"></div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-medium border border-purple-500/20">
+              event_001
+            </span>
+            <span class="status-badge status-planning">PLANNING</span>
+            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium border border-blue-500/20">
+              45 Days Until Event
+            </span>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="flex items-center gap-3">
+          <!-- Zoom Controls -->
+          <div class="flex items-center gap-2 glass rounded-lg px-3 py-1.5">
+            <button onclick="zoomOut()" class="w-8 h-8 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-sm">remove</span>
+            </button>
+            <span id="zoomValue" class="text-sm font-medium text-purple-400 min-w-[3rem] text-center">100%</span>
+            <button onclick="zoomIn()" class="w-8 h-8 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-sm">add</span>
+            </button>
+          </div>
+
+          <button class="w-10 h-10 rounded-lg glass hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+            <span class="material-symbols-outlined">fullscreen</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Canvas Area -->
+      <div id="canvas" class="flex-1 relative overflow-hidden grid-bg cursor-grab active:cursor-grabbing">
+        <!-- Panels Container -->
+        <div id="panelsContainer" class="absolute inset-0 pointer-events-none" style="transform-origin: center; z-index: 10;">
+          <!-- Panels will be dynamically added here -->
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <footer class="h-10 glass border-t border-slate-700/50 flex items-center justify-between px-6 text-xs diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">Panels: <span id="panelCount" class="text-purple-400 font-medium">0</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Event: <span class="text-purple-400 font-medium">Corporate Annual Summit 2025</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Date: <span class="text-green-400 font-medium">March 15, 2025</span></span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">Venue: <span class="text-purple-400 font-medium">Grand Convention Center</span></span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // State
+    let panelCounter = 1;
+    let zoom = 1;
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+
+    const canvas = document.getElementById('canvas');
+    const panelsContainer = document.getElementById('panelsContainer');
+    const zoomValue = document.getElementById('zoomValue');
+    const panelCount = document.getElementById('panelCount');
+
+    // Panel Templates (Event Management)
+    const panelTemplates = {
+      'event-overview': {
+        title: 'Event Overview',
+        icon: 'event',
+        width: 400,
+        height: 600,
+        tabs: {
+          'General': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Event Information</div>
+              <div class="form-group">
+                <label class="form-label">Event Name</label>
+                <input type="text" class="form-input" value="Corporate Annual Summit 2025" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Event Type</label>
+                <select class="form-select">
+                  <option>Conference</option>
+                  <option>Wedding</option>
+                  <option>Concert</option>
+                  <option>Corporate Event</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="form-group">
+                  <label class="form-label">Start Date</label>
+                  <input type="date" class="form-input" value="2025-03-15" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">End Date</label>
+                  <input type="date" class="form-input" value="2025-03-15" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Venue</label>
+                <input type="text" class="form-input" value="Grand Convention Center" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Expected Attendees</label>
+                <input type="number" class="form-input" value="500" />
+              </div>
+            </div>
+          `,
+          'Budget': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Budget Overview</div>
+              <div class="property-row">
+                <span class="property-label">Total Budget</span>
+                <span class="property-value text-green-400">$250,000</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Spent to Date</span>
+                <span class="property-value text-yellow-400">$127,500</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Remaining</span>
+                <span class="property-value text-purple-400">$122,500</span>
+              </div>
+              <div class="w-full bg-slate-700/50 rounded-full h-2 mb-4">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style="width: 51%"></div>
+              </div>
+              <div class="section-header">Category Breakdown</div>
+              <div class="property-row">
+                <span class="property-label">Venue & Facilities</span>
+                <span class="property-value">$85,000</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Catering</span>
+                <span class="property-value">$45,000</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">AV Equipment</span>
+                <span class="property-value">$32,000</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Marketing</span>
+                <span class="property-value">$18,500</span>
+              </div>
+            </div>
+          `,
+          'Attendees': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Registration Status</div>
+              <div class="property-row">
+                <span class="property-label">Registered</span>
+                <span class="property-value text-green-400">487 / 500</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Checked In</span>
+                <span class="property-value">0</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">VIP Guests</span>
+                <span class="property-value text-purple-400">45</span>
+              </div>
+              <div class="section-header">Demographics</div>
+              <div class="property-row">
+                <span class="property-label">Corporate</span>
+                <span class="property-value">385</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Press</span>
+                <span class="property-value">52</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Speakers</span>
+                <span class="property-value">25</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Staff</span>
+                <span class="property-value">25</span>
+              </div>
+            </div>
+          `,
+          'Vendors': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Active Vendors</div>
+              <div class="property-row">
+                <span class="property-label">Gourmet Events Catering</span>
+                <span class="property-value text-green-400">CONFIRMED</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">ProAV Systems</span>
+                <span class="property-value text-green-400">CONFIRMED</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Elite Lighting Co</span>
+                <span class="property-value text-green-400">CONFIRMED</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Grand Convention Center</span>
+                <span class="property-value text-green-400">CONFIRMED</span>
+              </div>
+              <div class="section-header">Pending Vendors</div>
+              <div class="property-row">
+                <span class="property-label">PhotoPro Studios</span>
+                <span class="property-value text-yellow-400">PENDING</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Luxury Transport</span>
+                <span class="property-value text-yellow-400">PENDING</span>
+              </div>
+            </div>
+          `
+        }
+      },
+
+      'quick-stats': {
+        title: 'Quick Stats',
+        icon: 'analytics',
+        width: 350,
+        height: 280,
+        content: `
+          <div class="p-4 grid grid-cols-2 gap-3">
+            <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-purple-400 text-lg">event</span>
+                <span class="text-xs text-slate-400">Days Until</span>
+              </div>
+              <div class="text-2xl font-bold text-purple-400">45</div>
+            </div>
+            <div class="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-green-400 text-lg">group</span>
+                <span class="text-xs text-slate-400">Attendees</span>
+              </div>
+              <div class="text-2xl font-bold text-green-400">500</div>
+            </div>
+            <div class="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-yellow-400 text-lg">task</span>
+                <span class="text-xs text-slate-400">Tasks Done</span>
+              </div>
+              <div class="text-2xl font-bold text-yellow-400">12/25</div>
+            </div>
+            <div class="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-blue-400 text-lg">attach_money</span>
+                <span class="text-xs text-slate-400">Budget Used</span>
+              </div>
+              <div class="text-2xl font-bold text-blue-400">51%</div>
+            </div>
+          </div>
+        `
+      },
+
+      'task-checklist': {
+        title: 'Task Checklist',
+        icon: 'checklist',
+        width: 380,
+        height: 450,
+        content: `
+          <div class="p-4 space-y-2">
+            <div class="section-header">This Week</div>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" checked />
+              <span class="text-xs">Finalize lighting equipment list</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" checked />
+              <span class="text-xs">Confirm audio team availability</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Review catering menu options</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Send vendor contracts for signature</span>
+            </label>
+            <div class="section-header">Next Week</div>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Schedule rehearsal time</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Finalize floor plan layout</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Order promotional materials</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30 cursor-pointer">
+              <input type="checkbox" class="form-checkbox" />
+              <span class="text-xs">Confirm parking arrangements</span>
+            </label>
+          </div>
+        `
+      },
+
+      'lighting-equipment': {
+        title: 'Lighting Equipment',
+        icon: 'lightbulb',
+        width: 450,
+        height: 550,
+        tabs: {
+          'LED': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">LED Par Fixtures</div>
+              <div class="form-group">
+                <label class="form-label">LED Par 64 Count</label>
+                <input type="number" class="form-input" value="12" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Power per Unit</label>
+                <select class="form-select">
+                  <option>180W</option>
+                  <option>200W</option>
+                  <option>250W</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status</label>
+                <select class="form-select">
+                  <option selected>CONFIRMED</option>
+                  <option>PENDING</option>
+                  <option>CANCELLED</option>
+                </select>
+              </div>
+
+              <div class="section-header">LED Fresnel</div>
+              <div class="form-group">
+                <label class="form-label">Fresnel Count</label>
+                <input type="number" class="form-input" value="12" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Color Temperature</label>
+                <select class="form-select">
+                  <option>3200K (Tungsten)</option>
+                  <option selected>5600K (Daylight)</option>
+                  <option>Variable 2800K-6500K</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Dimming Protocol</label>
+                <select class="form-select">
+                  <option selected>DMX512</option>
+                  <option>0-10V</option>
+                  <option>PWM</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'Moving Heads': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Beam Moving Heads</div>
+              <div class="form-group">
+                <label class="form-label">Beam Count</label>
+                <input type="number" class="form-input" value="4" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Model</label>
+                <select class="form-select">
+                  <option selected>Sharpy Beam 230W</option>
+                  <option>Clay Paky B-EYE K25</option>
+                  <option>Robe BMFL Blade</option>
+                </select>
+              </div>
+
+              <div class="section-header">Spot Moving Heads</div>
+              <div class="form-group">
+                <label class="form-label">Spot Count</label>
+                <input type="number" class="form-input" value="4" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Model</label>
+                <select class="form-select">
+                  <option selected>MAC Viper Profile 300W</option>
+                  <option>Robe Robin Pointe</option>
+                  <option>Clay Paky Mythos 2</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gobo Selection</label>
+                <select class="form-select">
+                  <option selected>Standard Set</option>
+                  <option>Custom Corporate Logos</option>
+                  <option>Abstract Patterns</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'DMX Control': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Main Console</div>
+              <div class="form-group">
+                <label class="form-label">Console Model</label>
+                <select class="form-select">
+                  <option selected>GrandMA3 Full-Size</option>
+                  <option>GrandMA3 Compact</option>
+                  <option>Avolites Sapphire Touch</option>
+                  <option>ETC Eos Ti</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">DMX Universes</label>
+                <input type="number" class="form-input" value="2" min="1" max="64" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Network Protocol</label>
+                <select class="form-select">
+                  <option selected>Art-Net</option>
+                  <option>sACN (E1.31)</option>
+                  <option>MA-Net3</option>
+                </select>
+              </div>
+
+              <div class="section-header">Backup System</div>
+              <div class="form-group">
+                <label class="form-label">Backup Console</label>
+                <select class="form-select">
+                  <option selected>GrandMA3 onPC Command Wing</option>
+                  <option>Full Console Mirror</option>
+                  <option>Laptop + USB Interface</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Failover Mode</label>
+                <select class="form-select">
+                  <option selected>Automatic</option>
+                  <option>Manual Switch</option>
+                </select>
+              </div>
+            </div>
+          `
+        }
+      },
+
+      'audio-equipment': {
+        title: 'Audio Equipment',
+        icon: 'volume_up',
+        width: 450,
+        height: 600,
+        tabs: {
+          'Main System': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">PA System Configuration</div>
+              <div class="form-group">
+                <label class="form-label">Main Speaker Model</label>
+                <select class="form-select">
+                  <option selected>d&b audiotechnik GSL Line Array</option>
+                  <option>L-Acoustics K2</option>
+                  <option>Meyer Sound LEOPARD</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Speaker Count Per Side</label>
+                <input type="number" class="form-input" value="8" min="4" max="16" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Subwoofer Configuration</label>
+                <select class="form-select">
+                  <option selected>4x 18" Double (Cardioid)</option>
+                  <option>2x 21" Single</option>
+                  <option>6x 18" End-Fire Array</option>
+                </select>
+              </div>
+
+              <div class="section-header">Stage Monitoring</div>
+              <div class="form-group">
+                <label class="form-label">Wedge Monitors</label>
+                <input type="number" class="form-input" value="6" min="2" max="12" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sidefill Speakers</label>
+                <input type="number" class="form-input" value="2" min="0" max="4" />
+              </div>
+
+              <div class="section-header">Mixing Console</div>
+              <div class="form-group">
+                <label class="form-label">FOH Console</label>
+                <select class="form-select">
+                  <option selected>DiGiCo SD12 (72 Inputs)</option>
+                  <option>Yamaha Rivage PM7 (144 Inputs)</option>
+                  <option>Avid VENUE S6L (144 Inputs)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Monitor Console</label>
+                <select class="form-select">
+                  <option selected>Yamaha CL5 (64 Inputs)</option>
+                  <option>Midas M32 (40 Inputs)</option>
+                  <option>DiGiCo SD10 (96 Inputs)</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'Microphones': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Wireless Handheld</div>
+              <div class="form-group">
+                <label class="form-label">Model</label>
+                <select class="form-select">
+                  <option selected>Shure ULXD2</option>
+                  <option>Sennheiser SKM 6000</option>
+                  <option>Audio-Technica 5000 Series</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-input" value="8" min="2" max="20" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Frequency Band</label>
+                <select class="form-select">
+                  <option selected>G50 (470-534 MHz)</option>
+                  <option>H50 (534-598 MHz)</option>
+                  <option>J50 (572-636 MHz)</option>
+                </select>
+              </div>
+
+              <div class="section-header">Wireless Lavalier</div>
+              <div class="form-group">
+                <label class="form-label">Model</label>
+                <select class="form-select">
+                  <option selected>Sennheiser EW-DP</option>
+                  <option>Shure ULXD1</option>
+                  <option>Audio-Technica 3000 Series</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-input" value="6" min="2" max="15" />
+              </div>
+
+              <div class="section-header">Wired Microphones</div>
+              <div class="form-group">
+                <label class="form-label">Podium Mic Model</label>
+                <select class="form-select">
+                  <option selected>Shure SM58</option>
+                  <option>Shure Beta 58A</option>
+                  <option>Sennheiser e835</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity</label>
+                <input type="number" class="form-input" value="2" min="1" max="6" />
+              </div>
+            </div>
+          `,
+          'Team': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Audio Team</div>
+              <div class="form-group">
+                <label class="form-label">Lead Audio Engineer</label>
+                <input type="text" class="form-input" value="Mike Thompson" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact</label>
+                <input type="email" class="form-input" value="mike.thompson@audiotech.com" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Assistant Engineer</label>
+                <input type="text" class="form-input" value="Sarah Davis" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Monitor Engineer</label>
+                <input type="text" class="form-input" value="Chris Wilson" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">RF Technician</label>
+                <input type="text" class="form-input" value="Alex Martinez" />
+              </div>
+
+              <div class="section-header">Stage Crew</div>
+              <div class="form-group">
+                <label class="form-label">Stage Technician 1</label>
+                <input type="text" class="form-input" value="Jordan Lee" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Stage Technician 2</label>
+                <input type="text" class="form-input" value="Taylor Brown" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Load-In Time</label>
+                <input type="time" class="form-input" value="08:00" />
+              </div>
+            </div>
+          `
+        }
+      },
+
+      'catering-menu': {
+        title: 'Catering Menu',
+        icon: 'restaurant',
+        width: 420,
+        height: 500,
+        tabs: {
+          'Overview': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Vendor Information</div>
+              <div class="form-group">
+                <label class="form-label">Catering Vendor</label>
+                <select class="form-select">
+                  <option selected>Gourmet Events Catering</option>
+                  <option>Premier Food Services</option>
+                  <option>Culinary Excellence Co</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Service Style</label>
+                <select class="form-select">
+                  <option selected>Buffet + Plated Dinner</option>
+                  <option>Full Buffet Service</option>
+                  <option>Plated Service Only</option>
+                  <option>Family Style</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Total Guest Count</label>
+                <input type="number" class="form-input" value="500" min="50" max="1000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Meal Budget Per Person</label>
+                <input type="number" class="form-input" value="90" min="20" max="200" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Service Staff Required</label>
+                <input type="number" class="form-input" value="25" min="5" max="50" />
+              </div>
+            </div>
+          `,
+          'Breakfast': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Breakfast Service</div>
+              <div class="form-group">
+                <label class="form-label">Service Time</label>
+                <input type="time" class="form-input" value="07:30" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Service Type</label>
+                <select class="form-select">
+                  <option selected>Continental Buffet</option>
+                  <option>Full Hot Breakfast Buffet</option>
+                  <option>Breakfast Stations</option>
+                </select>
+              </div>
+
+              <div class="section-header">Menu Items</div>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Fresh Fruit Platter</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Yogurt & Granola Station</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Assorted Pastries & Muffins</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Scrambled Eggs & Bacon</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Made-to-Order Omelet Station</span>
+              </label>
+
+              <div class="section-header">Beverages</div>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Coffee (Regular & Decaf)</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Assorted Teas</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Fresh Orange Juice</span>
+              </label>
+            </div>
+          `,
+          'Lunch': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Lunch Service</div>
+              <div class="form-group">
+                <label class="form-label">Service Time</label>
+                <input type="time" class="form-input" value="12:30" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Main Protein</label>
+                <select class="form-select">
+                  <option selected>Grilled Chicken & Salmon</option>
+                  <option>Beef Tenderloin & Chicken</option>
+                  <option>Salmon & Vegetarian Option</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Salad Bar Style</label>
+                <select class="form-select">
+                  <option selected>Garden Salad Bar</option>
+                  <option>Caesar Salad Station</option>
+                  <option>Mediterranean Bar</option>
+                </select>
+              </div>
+
+              <div class="section-header">Sides & Accompaniments</div>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Seasonal Roasted Vegetables</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Garlic Mashed Potatoes</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Wild Rice Pilaf</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Fresh Bread Rolls</span>
+              </label>
+
+              <div class="form-group">
+                <label class="form-label">Dessert Selection</label>
+                <select class="form-select">
+                  <option selected>Assorted Mini Desserts</option>
+                  <option>Chocolate Mousse</option>
+                  <option>Fruit Tart Station</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'Dinner': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Dinner Service</div>
+              <div class="form-group">
+                <label class="form-label">Service Time</label>
+                <input type="time" class="form-input" value="18:00" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Service Style</label>
+                <select class="form-select">
+                  <option selected>Plated Service (3-Course)</option>
+                  <option>Plated Service (4-Course)</option>
+                  <option>Buffet Service</option>
+                </select>
+              </div>
+
+              <div class="section-header">Main Course Options</div>
+              <div class="form-group">
+                <label class="form-label">Option 1</label>
+                <select class="form-select">
+                  <option selected>Prime Rib (10 oz)</option>
+                  <option>Filet Mignon (8 oz)</option>
+                  <option>New York Strip (12 oz)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Option 2</label>
+                <select class="form-select">
+                  <option selected>Lobster Tail (6 oz)</option>
+                  <option>Pan-Seared Salmon</option>
+                  <option>Chilean Sea Bass</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Appetizer Course</label>
+                <select class="form-select">
+                  <option selected>Mixed Greens with Vinaigrette</option>
+                  <option>Caesar Salad</option>
+                  <option>Soup of the Day</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Dessert</label>
+                <select class="form-select">
+                  <option selected>Chef's Signature Chocolate Torte</option>
+                  <option>Crème Brûlée</option>
+                  <option>New York Cheesecake</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'Dietary': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Dietary Requirements</div>
+              <div class="form-group">
+                <label class="form-label">Vegetarian Meals</label>
+                <input type="number" class="form-input" value="25" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Vegan Meals</label>
+                <input type="number" class="form-input" value="12" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gluten-Free Meals</label>
+                <input type="number" class="form-input" value="18" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Dairy-Free Meals</label>
+                <input type="number" class="form-input" value="8" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nut Allergies</label>
+                <input type="number" class="form-input" value="5" min="0" />
+              </div>
+
+              <div class="section-header">Special Accommodations</div>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Kosher meals available</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Halal meals available</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Low-sodium options</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Diabetic-friendly options</span>
+              </label>
+            </div>
+          `
+        }
+      },
+
+      'venue-details': {
+        title: 'Venue Details',
+        icon: 'location_on',
+        width: 400,
+        height: 520,
+        tabs: {
+          'Info': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Venue Information</div>
+              <div class="form-group">
+                <label class="form-label">Venue Name</label>
+                <input type="text" class="form-input" value="Grand Convention Center" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-input" value="123 Event Plaza, Downtown" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">City, State, ZIP</label>
+                <input type="text" class="form-input" value="New York, NY 10001" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Main Hall Capacity</label>
+                <input type="number" class="form-input" value="800" min="100" max="2000" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of Breakout Rooms</label>
+                <input type="number" class="form-input" value="4" min="0" max="10" />
+              </div>
+
+              <div class="section-header">Contact</div>
+              <div class="form-group">
+                <label class="form-label">Venue Manager</label>
+                <input type="text" class="form-input" value="Jennifer Clarke" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-input" value="+1 (555) 123-4567" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" value="j.clarke@grandcc.com" />
+              </div>
+            </div>
+          `,
+          'Accessibility': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Accessibility Features</div>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Wheelchair accessible entrances</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Accessible restrooms</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Elevators to all floors</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Reserved accessible parking</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" checked />
+                <span class="text-xs">Braille signage</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded hover:bg-slate-800/30">
+                <input type="checkbox" class="form-checkbox" />
+                <span class="text-xs">Assistive listening systems</span>
+              </label>
+
+              <div class="section-header">Parking</div>
+              <div class="form-group">
+                <label class="form-label">Total Parking Spaces</label>
+                <input type="number" class="form-input" value="200" min="50" max="500" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Accessible Parking Spaces</label>
+                <input type="number" class="form-input" value="20" min="5" max="50" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Valet Service Available</label>
+                <select class="form-select">
+                  <option selected>Yes</option>
+                  <option>No</option>
+                  <option>Upon Request</option>
+                </select>
+              </div>
+            </div>
+          `,
+          'Technical': `
+            <div class="p-4 space-y-3">
+              <div class="section-header">Technical Specifications</div>
+              <div class="form-group">
+                <label class="form-label">Ceiling Height (meters)</label>
+                <input type="number" class="form-input" value="9.5" step="0.1" min="3" max="15" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Power Available</label>
+                <select class="form-select">
+                  <option selected>400A 3-Phase</option>
+                  <option>600A 3-Phase</option>
+                  <option>200A 3-Phase</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Internet Connection</label>
+                <select class="form-select">
+                  <option selected>1 Gbps Fiber</option>
+                  <option>500 Mbps Fiber</option>
+                  <option>100 Mbps</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">WiFi Standard</label>
+                <select class="form-select">
+                  <option selected>WiFi 6 (802.11ax)</option>
+                  <option>WiFi 5 (802.11ac)</option>
+                </select>
+              </div>
+
+              <div class="section-header">Load-In & Rigging</div>
+              <div class="form-group">
+                <label class="form-label">Load-In Door Width (meters)</label>
+                <input type="number" class="form-input" value="4.5" step="0.1" min="2" max="8" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Load-In Door Height (meters)</label>
+                <input type="number" class="form-input" value="5.0" step="0.1" min="2.5" max="8" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Rigging Points Available</label>
+                <select class="form-select">
+                  <option selected>Yes (500kg per point)</option>
+                  <option>Yes (1000kg per point)</option>
+                  <option>No</option>
+                </select>
+              </div>
+            </div>
+          `
+        }
+      },
+
+      'recent-activity': {
+        title: 'Recent Activity',
+        icon: 'history',
+        width: 500,
+        height: 400,
+        content: `
+          <div class="p-4 space-y-2 text-xs">
+            <div class="flex items-start gap-2 p-2 bg-purple-500/10 rounded border-l-2 border-purple-500">
+              <span class="text-slate-500 font-mono">10:24</span>
+              <span class="material-symbols-outlined text-purple-400 text-sm">edit</span>
+              <div class="flex-1">
+                <span class="text-purple-400 font-medium">Budget updated</span>
+                <span class="text-slate-400"> by </span>
+                <span class="text-blue-400">Sarah Johnson</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 p-2 bg-green-500/10 rounded border-l-2 border-green-500">
+              <span class="text-slate-500 font-mono">09:15</span>
+              <span class="material-symbols-outlined text-green-400 text-sm">check_circle</span>
+              <div class="flex-1">
+                <span class="text-slate-400">Lighting equipment </span>
+                <span class="text-green-400 font-medium">confirmed</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 p-2 bg-blue-500/10 rounded border-l-2 border-blue-500">
+              <span class="text-slate-500 font-mono">08:45</span>
+              <span class="material-symbols-outlined text-blue-400 text-sm">person_add</span>
+              <div class="flex-1">
+                <span class="text-blue-400 font-medium">Mike Thompson</span>
+                <span class="text-slate-400"> added as Lead Audio Engineer</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 p-2 bg-yellow-500/10 rounded border-l-2 border-yellow-500">
+              <span class="text-slate-500 font-mono">08:12</span>
+              <span class="material-symbols-outlined text-yellow-400 text-sm">restaurant</span>
+              <div class="flex-1">
+                <span class="text-slate-400">Catering menu </span>
+                <span class="text-yellow-400 font-medium">revised</span>
+                <span class="text-slate-400"> - dietary options added</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 p-2 bg-red-500/10 rounded border-l-2 border-red-500">
+              <span class="text-slate-500 font-mono">07:30</span>
+              <span class="material-symbols-outlined text-red-400 text-sm">schedule</span>
+              <div class="flex-1">
+                <span class="text-slate-400">Timeline updated - </span>
+                <span class="text-red-400 font-medium">Rehearsal moved to 2:00 PM</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2 p-2 bg-cyan-500/10 rounded border-l-2 border-cyan-500">
+              <span class="text-slate-500 font-mono">Yesterday</span>
+              <span class="material-symbols-outlined text-cyan-400 text-sm">description</span>
+              <div class="flex-1">
+                <span class="text-slate-400">Vendor contract </span>
+                <span class="text-cyan-400 font-medium">signed</span>
+                <span class="text-slate-400"> - Audio equipment confirmed</span>
+              </div>
+            </div>
+          </div>
+        `
+      },
+    };
+
+    // Auto-create initial layout on load
+    window.addEventListener('load', () => {
+      createInitialLayout();
+    });
+
+    function createInitialLayout() {
+      // Create event management layout with multiple panels visible
+      const layouts = [
+        // Left column - Event overview and stats
+        { type: 'event-overview', x: 50, y: 50 },
+        { type: 'quick-stats', x: 50, y: 680 },
+
+        // Center column - Task checklist and recent activity
+        { type: 'task-checklist', x: 480, y: 50 },
+        { type: 'recent-activity', x: 480, y: 530 },
+
+        // Right column - Lighting, audio, catering
+        { type: 'lighting-equipment', x: 900, y: 50 },
+        { type: 'audio-equipment', x: 1380, y: 50 },
+        { type: 'catering-menu', x: 1860, y: 50 },
+
+        // Bottom right - Venue details
+        { type: 'venue-details', x: 1860, y: 580 },
+      ];
+
+      layouts.forEach((layout, index) => {
+        setTimeout(() => {
+          createPanel(layout.type, layout.x, layout.y);
+        }, index * 150);
+      });
+    }
+
+    // Zoom functions
+    function zoomIn() {
+      zoom = Math.min(zoom + 0.1, 3);
+      updateTransform();
+    }
+
+    function zoomOut() {
+      zoom = Math.max(zoom - 0.1, 0.3);
+      updateTransform();
+    }
+
+    function updateTransform() {
+      panelsContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+      zoomValue.textContent = Math.round(zoom * 100) + '%';
+    }
+
+    // Panning
+    canvas.addEventListener('mousedown', (e) => {
+      if (e.button === 1 || (e.button === 0 && e.target === canvas)) {
+        e.preventDefault();
+        isPanning = true;
+        panStartX = e.clientX - panX;
+        panStartY = e.clientY - panY;
+        canvas.style.cursor = 'grabbing';
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isPanning) {
+        panX = e.clientX - panStartX;
+        panY = e.clientY - panStartY;
+        updateTransform();
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isPanning = false;
+      canvas.style.cursor = 'grab';
+    });
+
+    // Zoom with wheel
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      zoom = Math.max(0.3, Math.min(3, zoom + delta));
+      updateTransform();
+    }, { passive: false });
+
+    // Create panel
+    function createPanel(type, x, y) {
+      const id = panelCounter++;
+      const template = panelTemplates[type];
+
+      if (!template) {
+        console.error('Unknown panel type:', type);
+        return;
+      }
+
+      const panel = document.createElement('div');
+      panel.className = 'absolute glass rounded-xl overflow-hidden panel-shadow pointer-events-auto';
+      panel.style.left = x + 'px';
+      panel.style.top = y + 'px';
+      panel.style.width = template.width + 'px';
+      panel.style.height = template.height + 'px';
+      panel.dataset.panelType = type;
+      panel.dataset.panelId = id;
+
+      // Check if template has tabs (object) or content (string)
+      const hasTabs = template.tabs && typeof template.tabs === 'object';
+      const tabNames = hasTabs ? Object.keys(template.tabs) : [];
+
+      const tabsHtml = hasTabs ? `
+        <div class="flex gap-1 px-3 pt-2 border-b border-slate-700/50">
+          ${tabNames.map((tabName, idx) => `
+            <button
+              class="tab-button px-3 py-1.5 text-xs rounded-t transition-all ${idx === 0 ? 'tab-active' : 'hover:bg-slate-700/30'}"
+              data-tab="${tabName}"
+              data-panel-id="${id}"
+            >${tabName}</button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      // Generate tab content divs
+      const tabContentHtml = hasTabs ?
+        tabNames.map((tabName, idx) => `
+          <div class="tab-content ${idx === 0 ? 'active' : ''}" data-tab="${tabName}">
+            ${template.tabs[tabName]}
+          </div>
+        `).join('') : template.content;
+
+      panel.innerHTML = `
+        <div class="h-full flex flex-col">
+          <div class="drag-handle border-b border-slate-700/50 diagonal-stripes bg-slate-800/30">
+            <!-- Title Row -->
+            <div class="px-4 py-2 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-${getIconColor(type)} text-lg">${template.icon}</span>
+                <span class="font-semibold text-sm">${template.title}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button class="w-7 h-7 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors" onclick="this.closest('.absolute').remove(); updatePanelCount();">
+                  <span class="material-symbols-outlined text-sm text-red-400">close</span>
+                </button>
+              </div>
+            </div>
+            <!-- Tabs Row (if exists) -->
+            ${tabsHtml}
+          </div>
+          <div class="flex-1 overflow-y-auto panel-content">
+            ${tabContentHtml}
+          </div>
+        </div>
+      `;
+
+      // Tab switching functionality
+      if (hasTabs) {
+        const tabButtons = panel.querySelectorAll('.tab-button');
+        const tabContents = panel.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent drag start
+            const targetTab = button.dataset.tab;
+
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to clicked button and corresponding content
+            button.classList.add('tab-active');
+            const targetContent = panel.querySelector(`.tab-content[data-tab="${targetTab}"]`);
+            if (targetContent) {
+              targetContent.classList.add('active');
+            }
+          });
+        });
+      }
+
+      // Dragging
+      const handle = panel.querySelector('.drag-handle');
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      handle.addEventListener('mousedown', (e) => {
+        // Don't start dragging if clicking on a tab button
+        if (e.target.closest('.tab-button')) return;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseInt(panel.style.left);
+        initialTop = parseInt(panel.style.top);
+        panel.style.zIndex = 1000;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = (e.clientX - startX) / zoom;
+        const dy = (e.clientY - startY) / zoom;
+        panel.style.left = (initialLeft + dx) + 'px';
+        panel.style.top = (initialTop + dy) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      panelsContainer.appendChild(panel);
+      updatePanelCount();
+    }
+
+    function getIconColor(type) {
+      const colors = {
+        'event-overview': 'purple-400',
+        'quick-stats': 'blue-400',
+        'task-checklist': 'green-400',
+        'lighting-equipment': 'yellow-400',
+        'audio-equipment': 'cyan-400',
+        'catering-menu': 'pink-400',
+        'venue-details': 'orange-400',
+        'recent-activity': 'indigo-400'
+      };
+      return colors[type] || 'purple-400';
+    }
+
+    function updatePanelCount() {
+      panelCount.textContent = document.querySelectorAll('#panelsContainer > .absolute').length;
+    }
+
+    // Initialize
+    updatePanelCount();
+
+    // ========================================
+    // Context Menu System
+    // ========================================
+
+    let contextMenu = null;
+    let contextMenuPosition = { x: 0, y: 0 };
+
+    // Create context menu on first use
+    function createContextMenu() {
+      if (contextMenu) return;
+
+      contextMenu = document.createElement('div');
+      contextMenu.className = 'context-menu';
+      contextMenu.innerHTML = `
+        <div class="glass rounded-xl overflow-hidden panel-shadow">
+          <!-- Search Section -->
+          <div class="p-3 border-b border-slate-700/50 bg-slate-800/50">
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+              <input
+                type="text"
+                id="contextMenuSearch"
+                placeholder="Search panels..."
+                class="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-600/50 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-purple-500 focus:bg-slate-900/80 transition-all"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <!-- Menu Header -->
+          <div class="px-4 py-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-slate-700/50">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-purple-400 text-sm">add_box</span>
+              <span class="text-xs font-semibold text-slate-300 uppercase tracking-wide">Add New Panel</span>
+            </div>
+          </div>
+
+          <!-- Panel List -->
+          <div id="contextMenuItems" class="max-h-96 overflow-y-auto">
+            <!-- Items will be populated by JavaScript -->
+          </div>
+
+          <!-- Footer -->
+          <div class="px-4 py-2 bg-slate-800/30 border-t border-slate-700/50 text-xs text-slate-500">
+            <div class="flex items-center justify-between">
+              <span><span id="visiblePanelCount"></span> panels available</span>
+              <span class="text-slate-600">Right-click canvas</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(contextMenu);
+
+      // Populate panel items
+      populateContextMenuItems();
+
+      // Search functionality
+      const searchInput = contextMenu.querySelector('#contextMenuSearch');
+      searchInput.addEventListener('input', (e) => {
+        filterContextMenuItems(e.target.value);
+      });
+
+      // Close on click outside
+      document.addEventListener('click', (e) => {
+        if (contextMenu && !contextMenu.contains(e.target)) {
+          hideContextMenu();
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && contextMenu.classList.contains('active')) {
+          hideContextMenu();
+        }
+      });
+    }
+
+    function populateContextMenuItems(filter = '') {
+      const itemsContainer = contextMenu.querySelector('#contextMenuItems');
+      const visibleCount = contextMenu.querySelector('#visiblePanelCount');
+
+      itemsContainer.innerHTML = '';
+      let count = 0;
+
+      Object.entries(panelTemplates).forEach(([type, template]) => {
+        const searchText = (template.title + ' ' + type).toLowerCase();
+        const filterLower = filter.toLowerCase();
+
+        if (!filter || searchText.includes(filterLower)) {
+          count++;
+          const item = document.createElement('div');
+          item.className = 'context-menu-item px-4 py-2.5 cursor-pointer border-b border-slate-800/50 last:border-b-0';
+
+          // Highlight matching text
+          let displayTitle = template.title;
+          if (filter) {
+            const regex = new RegExp(`(${filter})`, 'gi');
+            displayTitle = template.title.replace(regex, '<span class="search-highlight">$1</span>');
+          }
+
+          item.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-${getIconColor(type)}/10 flex items-center justify-center flex-shrink-0 border border-${getIconColor(type)}/20">
+                <span class="material-symbols-outlined text-${getIconColor(type)} text-sm">${template.icon}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium text-slate-200">${displayTitle}</div>
+                <div class="text-xs text-slate-500">${template.width}×${template.height}px</div>
+              </div>
+              <span class="material-symbols-outlined text-slate-600 text-lg flex-shrink-0">add_circle</span>
+            </div>
+          `;
+
+          item.addEventListener('click', () => {
+            createPanelAtContextMenu(type);
+          });
+
+          itemsContainer.appendChild(item);
+        }
+      });
+
+      visibleCount.textContent = count;
+
+      // Show "no results" message if needed
+      if (count === 0) {
+        itemsContainer.innerHTML = `
+          <div class="px-4 py-8 text-center">
+            <span class="material-symbols-outlined text-slate-600 text-4xl">search_off</span>
+            <div class="mt-2 text-sm text-slate-500">No panels found</div>
+            <div class="text-xs text-slate-600">Try a different search term</div>
+          </div>
+        `;
+      }
+    }
+
+    function filterContextMenuItems(searchTerm) {
+      populateContextMenuItems(searchTerm);
+    }
+
+    function showContextMenu(x, y) {
+      if (!contextMenu) {
+        createContextMenu();
+      }
+
+      contextMenuPosition = { x, y };
+
+      // Reset search
+      const searchInput = contextMenu.querySelector('#contextMenuSearch');
+      searchInput.value = '';
+      populateContextMenuItems();
+
+      // Position menu
+      contextMenu.style.left = x + 'px';
+      contextMenu.style.top = y + 'px';
+
+      // Show menu
+      contextMenu.classList.add('active');
+
+      // Focus search input
+      setTimeout(() => searchInput.focus(), 100);
+
+      // Adjust position if menu goes off-screen
+      setTimeout(() => {
+        const rect = contextMenu.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        if (rect.right > viewportWidth) {
+          contextMenu.style.left = (viewportWidth - rect.width - 20) + 'px';
+        }
+        if (rect.bottom > viewportHeight) {
+          contextMenu.style.top = (viewportHeight - rect.height - 20) + 'px';
+        }
+      }, 0);
+    }
+
+    function hideContextMenu() {
+      if (contextMenu) {
+        contextMenu.classList.remove('active');
+      }
+    }
+
+    function createPanelAtContextMenu(type) {
+      // Convert screen coordinates to canvas coordinates
+      const rect = canvas.getBoundingClientRect();
+      const canvasX = (contextMenuPosition.x - rect.left - panX) / zoom;
+      const canvasY = (contextMenuPosition.y - rect.top - panY) / zoom;
+
+      createPanel(type, canvasX, canvasY);
+      hideContextMenu();
+    }
+
+    // Right-click event listener
+    canvas.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      showContextMenu(e.clientX, e.clientY);
+    });
+  </script>
+</body>
+</html>
