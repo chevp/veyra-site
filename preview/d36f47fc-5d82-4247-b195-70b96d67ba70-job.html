@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Posting Editor Workspace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            arctic: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .diagonal-stripes {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .panel-shadow {
+      box-shadow:
+        0 4px 6px -1px rgba(59, 130, 246, 0.1),
+        0 2px 4px -1px rgba(59, 130, 246, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .hover-glow {
+      transition: all 0.3s ease;
+    }
+
+    .hover-glow:hover {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .drag-handle {
+      cursor: grab;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .tab-active {
+      background: rgba(59, 130, 246, 0.2);
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .panel-content {
+      font-size: 0.75rem;
+    }
+
+    .property-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .property-label {
+      color: #94a3b8;
+      font-size: 0.7rem;
+    }
+
+    .property-value {
+      color: #60a5fa;
+      font-size: 0.7rem;
+      font-family: monospace;
+    }
+
+    .section-header {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Preview Styles */
+    .preview-container {
+      background: white;
+      color: #1f2937;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .company-header {
+      background: linear-gradient(135deg, var(--brand-primary, #3b82f6) 0%, var(--brand-secondary, #1e40af) 100%);
+    }
+
+    .job-card {
+      border-left: 4px solid var(--brand-primary, #3b82f6);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 overflow-hidden h-screen">
+  <!-- Main Container -->
+  <div class="h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside class="w-20 glass border-r border-slate-700/50 flex flex-col items-center py-6 gap-4 diagonal-stripes">
+      <!-- Logo -->
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 hover-glow cursor-pointer">
+        <span class="material-symbols-outlined text-white text-2xl">work</span>
+      </div>
+
+      <!-- Tool Icons -->
+      <div class="flex flex-col gap-3 flex-1">
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative bg-blue-500/20">
+          <span class="material-symbols-outlined text-blue-400">edit_document</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Job Editor
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-purple-400">preview</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Preview
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-green-400">badge</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Company Branding
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-yellow-400">list</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Job List
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-red-400">upload</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Publish
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-cyan-400">analytics</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Analytics
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="flex flex-col gap-3">
+        <div class="w-0.5 h-8 bg-slate-700/50 mx-auto"></div>
+        <button class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-slate-400">settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Bar -->
+      <header class="h-16 glass border-b border-slate-700/50 flex items-center justify-between px-6 diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-bold gradient-text">Job Posting Editor</h1>
+          <div class="h-6 w-px bg-slate-700"></div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium border border-blue-500/20">
+              TechCorp AG
+            </span>
+            <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-medium border border-yellow-500/20">
+              DRAFT
+            </span>
+            <span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20">
+              Auto-Save On
+            </span>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="flex items-center gap-3">
+          <!-- Publishing Controls -->
+          <div class="flex items-center gap-2 glass rounded-lg px-3 py-2">
+            <button class="px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-medium hover:bg-blue-500/30 transition-colors">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">save</span>
+              Save Draft
+            </button>
+            <button class="px-3 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-medium hover:bg-purple-500/30 transition-colors">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">visibility</span>
+              Preview
+            </button>
+            <button class="px-3 py-1 rounded bg-green-500/20 text-green-400 text-xs font-medium hover:bg-green-500/30 transition-colors">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">publish</span>
+              Publish
+            </button>
+          </div>
+
+          <!-- View Controls -->
+          <div class="flex items-center gap-2 glass rounded-lg px-3 py-1.5">
+            <button onclick="toggleView('editor')" class="w-8 h-8 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-sm">edit</span>
+            </button>
+            <button onclick="toggleView('split')" class="w-8 h-8 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors bg-blue-500/20">
+              <span class="material-symbols-outlined text-sm">view_column</span>
+            </button>
+            <button onclick="toggleView('preview')" class="w-8 h-8 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-sm">preview</span>
+            </button>
+          </div>
+
+          <button class="w-10 h-10 rounded-lg glass hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+            <span class="material-symbols-outlined">fullscreen</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Canvas Area (Split View) -->
+      <div class="flex-1 flex overflow-hidden">
+        <!-- Left: Job Editor Panel -->
+        <div id="editorPanel" class="w-1/2 border-r border-slate-700/50 overflow-hidden flex flex-col">
+          <!-- Editor Header -->
+          <div class="glass border-b border-slate-700/50 px-4 py-2 diagonal-stripes">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-400 text-lg">edit_document</span>
+                <span class="font-semibold text-sm">Job Details Editor</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button class="px-2 py-1 text-xs rounded bg-slate-700/50 hover:bg-slate-600/50 transition-colors">Templates</button>
+                <button class="px-2 py-1 text-xs rounded bg-slate-700/50 hover:bg-slate-600/50 transition-colors">Import</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Editor Tabs -->
+          <div class="flex gap-1 px-4 pt-2 glass border-b border-slate-700/50">
+            <button class="px-3 py-1 text-xs rounded-t tab-active">Basic Info</button>
+            <button class="px-3 py-1 text-xs rounded-t hover:bg-slate-700/30">Description</button>
+            <button class="px-3 py-1 text-xs rounded-t hover:bg-slate-700/30">Requirements</button>
+            <button class="px-3 py-1 text-xs rounded-t hover:bg-slate-700/30">Benefits</button>
+            <button class="px-3 py-1 text-xs rounded-t hover:bg-slate-700/30">SEO</button>
+          </div>
+
+          <!-- Editor Content -->
+          <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Job Title -->
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Job Title *</label>
+              <input type="text"
+                     id="jobTitle"
+                     value="Senior Software Engineer (m/w/d)"
+                     onchange="updatePreview()"
+                     class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+            </div>
+
+            <!-- Department -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Department</label>
+                <select id="department" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+                  <option>Software Development</option>
+                  <option>DevOps</option>
+                  <option>Data Engineering</option>
+                  <option>Product Management</option>
+                  <option>Design</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Employment Type</label>
+                <select id="employmentType" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Contract</option>
+                  <option>Internship</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Location</label>
+                <input type="text"
+                       id="location"
+                       value="Zürich, Switzerland"
+                       onchange="updatePreview()"
+                       class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Remote Options</label>
+                <select id="remoteOptions" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+                  <option>Hybrid (2 days office)</option>
+                  <option>On-site</option>
+                  <option>Fully Remote</option>
+                  <option>Flexible</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Salary Range -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Salary From (CHF)</label>
+                <input type="number"
+                       id="salaryFrom"
+                       value="100000"
+                       onchange="updatePreview()"
+                       class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Salary To (CHF)</label>
+                <input type="number"
+                       id="salaryTo"
+                       value="140000"
+                       onchange="updatePreview()"
+                       class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+              </div>
+            </div>
+
+            <!-- Job Summary -->
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Job Summary *</label>
+              <textarea id="jobSummary"
+                        rows="4"
+                        onchange="updatePreview()"
+                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">Wir suchen einen erfahrenen Software Engineer für unser agiles Entwicklungsteam. Sie entwickeln innovative Cloud-Lösungen und arbeiten mit modernsten Technologien.</textarea>
+            </div>
+
+            <!-- Key Responsibilities -->
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">Key Responsibilities</label>
+              <div class="space-y-2">
+                <div class="flex gap-2">
+                  <input type="text" value="Entwicklung von Microservices mit Java/Spring Boot" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </div>
+                <div class="flex gap-2">
+                  <input type="text" value="Design und Implementierung von RESTful APIs" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </div>
+                <div class="flex gap-2">
+                  <input type="text" value="Code Reviews und Mentoring von Junior Developers" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </div>
+                <button class="w-full px-3 py-2 rounded bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 text-xs">
+                  <span class="material-symbols-outlined text-sm align-middle mr-1">add</span>
+                  Add Responsibility
+                </button>
+              </div>
+            </div>
+
+            <!-- Application Deadline -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Application Deadline</label>
+                <input type="date"
+                       id="deadline"
+                       value="2025-03-31"
+                       onchange="updatePreview()"
+                       class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Job ID</label>
+                <input type="text"
+                       id="jobId"
+                       value="TC-2025-SE-001"
+                       readonly
+                       class="w-full px-3 py-2 rounded bg-slate-900/50 border border-slate-700 text-sm text-slate-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Live Preview Panel -->
+        <div id="previewPanel" class="w-1/2 overflow-hidden flex flex-col bg-slate-900">
+          <!-- Preview Header -->
+          <div class="glass border-b border-slate-700/50 px-4 py-2 diagonal-stripes">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-purple-400 text-lg">preview</span>
+                <span class="font-semibold text-sm">Live Homepage Preview</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button class="px-2 py-1 text-xs rounded bg-slate-700/50 hover:bg-slate-600/50 transition-colors">Desktop</button>
+                <button class="px-2 py-1 text-xs rounded bg-slate-700/50 hover:bg-slate-600/50 transition-colors">Tablet</button>
+                <button class="px-2 py-1 text-xs rounded bg-slate-700/50 hover:bg-slate-600/50 transition-colors">Mobile</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview Content (Simulated Browser) -->
+          <div class="flex-1 overflow-y-auto">
+            <div id="jobPreview" class="preview-container min-h-full">
+              <!-- Company Header with Branding -->
+              <div class="company-header text-white p-8" style="--brand-primary: #3b82f6; --brand-secondary: #1e40af;">
+                <div class="max-w-5xl mx-auto">
+                  <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-4">
+                      <div class="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center text-2xl font-bold">
+                        TC
+                      </div>
+                      <div>
+                        <h1 class="text-2xl font-bold">TechCorp AG</h1>
+                        <p class="text-sm opacity-90">Innovation through Technology</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <a href="#" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">Home</a>
+                      <a href="#" class="px-4 py-2 bg-white/20 rounded-lg text-sm">Karriere</a>
+                      <a href="#" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">Über uns</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Content -->
+              <div class="max-w-5xl mx-auto p-8">
+                <!-- Breadcrumbs -->
+                <div class="text-xs text-gray-500 mb-4">
+                  <a href="#" class="hover:text-blue-600">Home</a> /
+                  <a href="#" class="hover:text-blue-600">Karriere</a> /
+                  <span class="text-gray-900" id="breadcrumbTitle">Senior Software Engineer (m/w/d)</span>
+                </div>
+
+                <!-- Job Header Card -->
+                <div class="job-card bg-white rounded-xl shadow-lg p-8 mb-6" style="--brand-primary: #3b82f6;">
+                  <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                      <h1 id="previewTitle" class="text-3xl font-bold text-gray-900 mb-2">Senior Software Engineer (m/w/d)</h1>
+                      <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+                        <div class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-base">location_on</span>
+                          <span id="previewLocation">Zürich, Switzerland</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-base">work</span>
+                          <span id="previewDepartment">Software Development</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-base">schedule</span>
+                          <span id="previewType">Full-time</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                          <span class="material-symbols-outlined text-base">home</span>
+                          <span id="previewRemote">Hybrid (2 days office)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                      Jetzt bewerben
+                    </button>
+                  </div>
+
+                  <!-- Salary Range -->
+                  <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-blue-600">payments</span>
+                      <div>
+                        <div class="text-xs text-gray-600">Salary Range</div>
+                        <div class="text-lg font-bold text-gray-900">
+                          <span id="previewSalaryFrom">100'000</span> - <span id="previewSalaryTo">140'000</span> CHF/year
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Job Description -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                  <h2 class="text-xl font-bold text-gray-900 mb-4">Über die Position</h2>
+                  <p id="previewSummary" class="text-gray-700 leading-relaxed">
+                    Wir suchen einen erfahrenen Software Engineer für unser agiles Entwicklungsteam. Sie entwickeln innovative Cloud-Lösungen und arbeiten mit modernsten Technologien.
+                  </p>
+                </div>
+
+                <!-- Key Responsibilities -->
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                  <h2 class="text-xl font-bold text-gray-900 mb-4">Ihre Aufgaben</h2>
+                  <ul class="space-y-2 text-gray-700">
+                    <li class="flex items-start gap-2">
+                      <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
+                      <span>Entwicklung von Microservices mit Java/Spring Boot</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
+                      <span>Design und Implementierung von RESTful APIs</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
+                      <span>Code Reviews und Mentoring von Junior Developers</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Application Deadline -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                  <div class="flex items-center gap-2 text-yellow-800">
+                    <span class="material-symbols-outlined">event</span>
+                    <span class="font-medium">Bewerbungsfrist: <span id="previewDeadline">31. März 2025</span></span>
+                  </div>
+                </div>
+
+                <!-- Apply Button -->
+                <div class="text-center">
+                  <button class="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-bold text-lg">
+                    <span class="material-symbols-outlined align-middle mr-2">send</span>
+                    Bewerbung einreichen
+                  </button>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div class="bg-gray-100 mt-12 py-8 px-8">
+                <div class="max-w-5xl mx-auto text-center text-sm text-gray-600">
+                  <p>&copy; 2025 TechCorp AG. Alle Rechte vorbehalten.</p>
+                  <p class="mt-2">Job ID: <span id="previewJobId">TC-2025-SE-001</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <footer class="h-10 glass border-t border-slate-700/50 flex items-center justify-between px-6 text-xs diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">Status: <span class="text-yellow-400 font-medium">Draft</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Last saved: <span class="text-blue-400 font-medium">Just now</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Company: <span class="text-green-400 font-medium">TechCorp AG</span></span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">View: <span class="text-purple-400 font-medium">Split (Editor + Preview)</span></span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    function updatePreview() {
+      // Update job title
+      const title = document.getElementById('jobTitle').value;
+      document.getElementById('previewTitle').textContent = title;
+      document.getElementById('breadcrumbTitle').textContent = title;
+
+      // Update location
+      document.getElementById('previewLocation').textContent = document.getElementById('location').value;
+
+      // Update department
+      document.getElementById('previewDepartment').textContent = document.getElementById('department').value;
+
+      // Update employment type
+      document.getElementById('previewType').textContent = document.getElementById('employmentType').value;
+
+      // Update remote options
+      document.getElementById('previewRemote').textContent = document.getElementById('remoteOptions').value;
+
+      // Update salary
+      const salaryFrom = parseInt(document.getElementById('salaryFrom').value).toLocaleString('de-CH');
+      const salaryTo = parseInt(document.getElementById('salaryTo').value).toLocaleString('de-CH');
+      document.getElementById('previewSalaryFrom').textContent = salaryFrom;
+      document.getElementById('previewSalaryTo').textContent = salaryTo;
+
+      // Update summary
+      document.getElementById('previewSummary').textContent = document.getElementById('jobSummary').value;
+
+      // Update deadline
+      const deadline = new Date(document.getElementById('deadline').value);
+      const deadlineFormatted = deadline.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('previewDeadline').textContent = deadlineFormatted;
+
+      // Update job ID
+      document.getElementById('previewJobId').textContent = document.getElementById('jobId').value;
+    }
+
+    function toggleView(view) {
+      const editorPanel = document.getElementById('editorPanel');
+      const previewPanel = document.getElementById('previewPanel');
+
+      switch(view) {
+        case 'editor':
+          editorPanel.style.width = '100%';
+          previewPanel.style.display = 'none';
+          break;
+        case 'split':
+          editorPanel.style.width = '50%';
+          previewPanel.style.display = 'flex';
+          previewPanel.style.width = '50%';
+          break;
+        case 'preview':
+          editorPanel.style.display = 'none';
+          previewPanel.style.display = 'flex';
+          previewPanel.style.width = '100%';
+          break;
+      }
+    }
+
+    // Initialize preview
+    updatePreview();
+  </script>
+</body>
+</html>
