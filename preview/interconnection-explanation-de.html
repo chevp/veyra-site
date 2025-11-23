@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event-Planung & Stellenausschreibung Integration - Veyra Plattform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            arctic: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+            purple: {
+              50: '#fdf4ff',
+              100: '#fae8ff',
+              200: '#f5d0fe',
+              300: '#f0abfc',
+              400: '#e879f9',
+              500: '#d946ef',
+              600: '#c026d3',
+              700: '#a21caf',
+              800: '#86198f',
+              900: '#701a75',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .diagonal-stripes {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #0ea5e9 0%, #d946ef 100%);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #38bdf8 0%, #e879f9 100%);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #d946ef 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-border {
+      border-image: linear-gradient(135deg, #0ea5e9 0%, #d946ef 100%) 1;
+    }
+
+    .hover-glow {
+      transition: all 0.3s ease;
+    }
+
+    .hover-glow:hover {
+      box-shadow: 0 0 30px rgba(14, 165, 233, 0.3), 0 0 60px rgba(217, 70, 239, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .connection-line {
+      stroke-dasharray: 5, 5;
+      animation: dash 20s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -1000;
+      }
+    }
+
+    .feature-card {
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 40px rgba(14, 165, 233, 0.2);
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .pulse-dot {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .integration-flow {
+      position: relative;
+    }
+
+    .integration-flow::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #0ea5e9 0%, #d946ef 100%);
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+
+    .flow-step {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 overflow-x-hidden">
+  <!-- Hero Section -->
+  <section class="min-h-screen relative overflow-hidden grid-bg">
+    <!-- Decorative Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative glass border-b border-slate-700/50 diagonal-stripes">
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-2xl">integration_instructions</span>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold gradient-text">Veyra Plattform</h1>
+              <p class="text-xs text-slate-400">Integrierte Lösungen</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="#overview" class="px-4 py-2 text-sm hover:text-blue-400 transition-colors">Übersicht</a>
+            <a href="#integration" class="px-4 py-2 text-sm hover:text-purple-400 transition-colors">Integration</a>
+            <a href="#demos" class="px-4 py-2 text-sm hover:text-cyan-400 transition-colors">Live-Demos</a>
+            <a href="#benefits" class="px-4 py-2 text-sm hover:text-green-400 transition-colors">Vorteile</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="relative max-w-7xl mx-auto px-6 py-20">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+          <span class="pulse-dot w-2 h-2 bg-green-400 rounded-full"></span>
+          <span class="text-sm text-slate-300">Nahtloses Integrations-Ökosystem</span>
+        </div>
+
+        <h1 class="text-6xl md:text-7xl font-black mb-6">
+          <span class="gradient-text">Event-Planung</span>
+          <br />
+          <span class="text-slate-100">trifft auf</span>
+          <br />
+          <span class="gradient-text">Stellenausschreibung</span>
+        </h1>
+
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+          Entdecken Sie, wie Veyras einheitliche Plattform leistungsstarke Synergien zwischen Event-Management
+          und Talentakquise schafft und die gesamten Betriebsabläufe Ihrer Organisation optimiert.
+        </p>
+
+        <div class="flex items-center justify-center gap-4">
+          <a href="#integration" class="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl font-semibold hover-glow">
+            <span class="material-symbols-outlined text-sm align-middle mr-2">explore</span>
+            Integration erkunden
+          </a>
+          <a href="#demos" class="px-8 py-4 glass rounded-xl font-semibold hover-glow">
+            <span class="material-symbols-outlined text-sm align-middle mr-2">play_circle</span>
+            Live-Demos ansehen
+          </a>
+        </div>
+      </div>
+
+      <!-- Integration Flow Visualization -->
+      <div class="integration-flow flex items-center justify-between gap-8 mt-20">
+        <div class="flow-step flex-1 glass rounded-2xl p-8 hover-glow">
+          <div class="w-16 h-16 rounded-xl bg-purple-500/20 flex items-center justify-center mb-4 mx-auto border-2 border-purple-500/50">
+            <span class="material-symbols-outlined text-purple-400 text-3xl">event</span>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-purple-400">Event-Planung</h3>
+          <p class="text-sm text-slate-400 text-center">Umfassende Event-Management-Tools</p>
+        </div>
+
+        <div class="flow-step flex-none">
+          <div class="w-16 h-16 rounded-full glass flex items-center justify-center">
+            <span class="material-symbols-outlined text-cyan-400 text-2xl">sync</span>
+          </div>
+        </div>
+
+        <div class="flow-step flex-1 glass rounded-2xl p-8 hover-glow">
+          <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center mb-4 mx-auto border-2 border-cyan-500/50">
+            <span class="material-symbols-outlined text-cyan-400 text-3xl">hub</span>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-cyan-400">Einheitliche Plattform</h3>
+          <p class="text-sm text-slate-400 text-center">Gemeinsame Daten & nahtlose Workflows</p>
+        </div>
+
+        <div class="flow-step flex-none">
+          <div class="w-16 h-16 rounded-full glass flex items-center justify-center">
+            <span class="material-symbols-outlined text-cyan-400 text-2xl">sync</span>
+          </div>
+        </div>
+
+        <div class="flow-step flex-1 glass rounded-2xl p-8 hover-glow">
+          <div class="w-16 h-16 rounded-xl bg-blue-500/20 flex items-center justify-center mb-4 mx-auto border-2 border-blue-500/50">
+            <span class="material-symbols-outlined text-blue-400 text-3xl">work</span>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2 text-blue-400">Stellenausschreibung</h3>
+          <p class="text-sm text-slate-400 text-center">Intelligentes Talentakquise-System</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Explanation Section -->
+  <section id="integration" class="py-20 bg-slate-900/50 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-black mb-4">
+          <span class="gradient-text">Vernetzte Workflows</span>
+        </h2>
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+          Verstehen Sie, wie Event-Planung und Stellenausschreibung starke Synergien in Ihrer Organisation schaffen
+        </p>
+      </div>
+
+      <!-- Integration Cards Grid -->
+      <div class="grid md:grid-cols-2 gap-8 mb-16">
+        <!-- Card 1: Event Staffing -->
+        <div class="feature-card glass rounded-2xl p-8 border-l-4 border-purple-500">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-purple-400 text-2xl">groups</span>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2 text-purple-400">Automatisierte Event-Personalplanung</h3>
+              <p class="text-slate-300">Nahtlose Rekrutierung von Event-Personal durch integrierte Stellenausschreibungen</p>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm text-slate-400">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-purple-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Automatische Stellenerstellung:</strong> Bei Erstellung eines Events generiert das System automatisch Stellenausschreibungen für benötigte Rollen (Tontechniker, Lichttechniker, Catering-Personal usw.)</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-purple-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Kompetenz-Matching:</strong> Event-Anforderungen werden mit Kandidatenprofilen aus dem Talentpool der Jobbörse abgeglichen</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-purple-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Verfügbarkeits-Synchronisation:</strong> Verfügbarkeitskalender des Personals integrieren sich mit Event-Zeitplänen zur Vermeidung von Konflikten</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Talent Showcase -->
+        <div class="feature-card glass rounded-2xl p-8 border-l-4 border-blue-500">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-blue-400 text-2xl">star</span>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2 text-blue-400">Events als Talent-Schaufenster</h3>
+              <p class="text-slate-300">Verwandeln Sie Events in Rekrutierungsmöglichkeiten</p>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm text-slate-400">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-blue-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Live-Rekrutierungs-Events:</strong> Veranstalten Sie Karrieremessen, Branchenkonferenzen und Networking-Events und verwalten Sie diese auf derselben Plattform</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-blue-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Event-Teilnehmer-Datenbank:</strong> Wandeln Sie Event-Teilnehmer automatisch in potenzielle Kandidaten für zukünftige Positionen um</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-blue-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Leistungsverfolgung:</strong> Verfolgen Sie die Leistung von Auftragnehmern bei Events, um zukünftige Einstellungsentscheidungen zu informieren</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Resource Optimization -->
+        <div class="feature-card glass rounded-2xl p-8 border-l-4 border-cyan-500">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-cyan-400 text-2xl">settings_suggest</span>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2 text-cyan-400">Ressourcen-Optimierung</h3>
+              <p class="text-slate-300">Maximieren Sie die Effizienz auf beiden Plattformen</p>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm text-slate-400">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-cyan-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Gemeinsame Dienstleister-Datenbank:</strong> Unternehmen, die Event-Dienstleistungen anbieten, können auch Stellenausschreibungen für Festanstellungen veröffentlichen</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-cyan-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Budget-Intelligenz:</strong> Event-Budgets informieren Gehaltsspannen für zugehörige Stellenausschreibungen</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-cyan-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Plattformübergreifende Analysen:</strong> Einheitliches Dashboard zeigt sowohl Event-ROI als auch Rekrutierungs-Kennzahlen</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Client Experience -->
+        <div class="feature-card glass rounded-2xl p-8 border-l-4 border-green-500">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-green-400 text-2xl">handshake</span>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-2 text-green-400">Verbesserte Kundenerfahrung</h3>
+              <p class="text-slate-300">Bieten Sie mehr Mehrwert durch integrierte Services</p>
+            </div>
+          </div>
+          <div class="space-y-3 text-sm text-slate-400">
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-green-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Alles-in-Einem-Lösung:</strong> Kunden, die Firmenevents planen, können auch Stellenausschreibungen für eventspezifische Rollen veröffentlichen</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-green-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Marken-Konsistenz:</strong> Unternehmensbranding fließt nahtlos zwischen Event-Seiten und Stellenausschreibungen</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-green-400 text-base mt-0.5">arrow_forward</span>
+              <p><strong class="text-slate-200">Einheitliches Dashboard:</strong> Verwalten Sie Events und Rekrutierungskampagnen über eine einheitliche Oberfläche</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use Case Example -->
+      <div class="glass rounded-2xl p-10 border-2 border-cyan-500/30">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/50 mb-4">
+            <span class="material-symbols-outlined text-cyan-400 text-base">lightbulb</span>
+            <span class="text-sm text-cyan-400 font-semibold">PRAXIS-SZENARIO</span>
+          </div>
+          <h3 class="text-3xl font-bold mb-3">Corporate Annual Summit Beispiel</h3>
+          <p class="text-slate-300 max-w-2xl mx-auto">Sehen Sie, wie ein einzelnes Event mehrere vernetzte Workflows erstellt</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+            <div class="text-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl font-bold text-purple-400">1</span>
+              </div>
+              <h4 class="font-bold text-purple-400 mb-2">Event erstellt</h4>
+            </div>
+            <ul class="space-y-2 text-xs text-slate-400">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-purple-400" style="font-size: 14px;">check</span>
+                <span>Firmen-Gipfel für 500 Teilnehmer</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-purple-400" style="font-size: 14px;">check</span>
+                <span>Budget: 250.000 $</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-purple-400" style="font-size: 14px;">check</span>
+                <span>Ort: Grand Convention Center</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+            <div class="text-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl font-bold text-cyan-400">2</span>
+              </div>
+              <h4 class="font-bold text-cyan-400 mb-2">Auto-generierte Jobs</h4>
+            </div>
+            <ul class="space-y-2 text-xs text-slate-400">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size: 14px;">work</span>
+                <span>Leitender Tontechniker (Vertrag)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size: 14px;">work</span>
+                <span>Lichttechniker (4 Positionen)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-cyan-400" style="font-size: 14px;">work</span>
+                <span>Catering-Servicepersonal (25 Positionen)</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+            <div class="text-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl font-bold text-blue-400">3</span>
+              </div>
+              <h4 class="font-bold text-blue-400 mb-2">Einheitliche Ergebnisse</h4>
+            </div>
+            <ul class="space-y-2 text-xs text-slate-400">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-blue-400" style="font-size: 14px;">verified</span>
+                <span>Personal aus Talentpool zugeordnet</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-blue-400" style="font-size: 14px;">verified</span>
+                <span>Leistung für zukünftige Einstellungen verfolgt</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-blue-400" style="font-size: 14px;">verified</span>
+                <span>Teilnehmer werden zu potenziellen Kandidaten</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Demos Section -->
+  <section id="demos" class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-50"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-black mb-4">
+          <span class="gradient-text">Live-Plattform-Demos</span>
+        </h2>
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+          Erleben Sie beide Plattformen in Aktion - vollständig interaktiv und vernetzt
+        </p>
+      </div>
+
+      <!-- Event Planning Demo -->
+      <div class="mb-20">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="flex items-center gap-3 glass rounded-xl px-6 py-4 flex-1">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-purple-400">event</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-purple-400">Event-Planungs-Dashboard</h3>
+              <p class="text-sm text-slate-400">Umfassender Event-Management-Arbeitsbereich</p>
+            </div>
+          </div>
+          <a href="62edbd89-d4c1-4f0f-97d8-246a21ca7205-event.html" target="_blank"
+             class="px-6 py-4 glass rounded-xl hover-glow flex items-center gap-2 font-semibold">
+            <span class="material-symbols-outlined">open_in_new</span>
+            <span>Vollbild öffnen</span>
+          </a>
+        </div>
+        <div class="iframe-container glass">
+          <iframe src="62edbd89-d4c1-4f0f-97d8-246a21ca7205-event.html"
+                  title="Event-Planungs-Dashboard Demo"
+                  loading="lazy"></iframe>
+        </div>
+        <div class="mt-4 glass rounded-lg p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-purple-400">info</span>
+            <div class="text-sm text-slate-300">
+              <strong class="text-purple-400">Interaktive Demo:</strong> Dies ist ein voll funktionsfähiger Event-Planungs-Arbeitsbereich.
+              Rechtsklicken Sie auf die Arbeitsfläche, um Panels für Beleuchtung, Audio, Catering, Veranstaltungsortsverwaltung und mehr hinzuzufügen.
+              Beachten Sie, wie das System Personalbedarf verfolgt - diese generieren automatisch Stellenausschreibungen auf der Einstellungsplattform unten.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Advertising Demo -->
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <div class="flex items-center gap-3 glass rounded-xl px-6 py-4 flex-1">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-blue-400">work</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-blue-400">Stellenausschreibungs-Editor</h3>
+              <p class="text-sm text-slate-400">Professionelle Rekrutierungsplattform mit Live-Vorschau</p>
+            </div>
+          </div>
+          <a href="d36f47fc-5d82-4247-b195-70b96d67ba70-job.html" target="_blank"
+             class="px-6 py-4 glass rounded-xl hover-glow flex items-center gap-2 font-semibold">
+            <span class="material-symbols-outlined">open_in_new</span>
+            <span>Vollbild öffnen</span>
+          </a>
+        </div>
+        <div class="iframe-container glass">
+          <iframe src="d36f47fc-5d82-4247-b195-70b96d67ba70-job.html"
+                  title="Stellenausschreibungs-Editor Demo"
+                  loading="lazy"></iframe>
+        </div>
+        <div class="mt-4 glass rounded-lg p-4">
+          <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-blue-400">info</span>
+            <div class="text-sm text-slate-300">
+              <strong class="text-blue-400">Interaktive Demo:</strong> Bearbeiten Sie Stellendetails in Echtzeit und sehen Sie Änderungen sofort in der Vorschau.
+              Diese Plattform integriert sich mit dem Event-System oben - wenn Events spezialisiertes Personal benötigen,
+              werden hier automatisch Stellenausschreibungen mit vorausgefüllten Anforderungen und Gehaltsspannen basierend auf Event-Budgets erstellt.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section id="benefits" class="py-20 bg-slate-900/50 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-5xl font-black mb-4">
+          <span class="gradient-text">Plattform-Vorteile</span>
+        </h2>
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+          Warum die Integration von Event-Planung und Stellenausschreibung außergewöhnlichen Mehrwert schafft
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-green-400 text-2xl">savings</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-green-400">Kosteneffizienz</h3>
+          <p class="text-sm text-slate-400">Reduzieren Sie Overhead durch Verwaltung von Event-Logistik und Personalbedarf von einer einzigen Plattform aus</p>
+        </div>
+
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-yellow-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-yellow-400 text-2xl">speed</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-yellow-400">Schnellere Rekrutierung</h3>
+          <p class="text-sm text-slate-400">Gleichen Sie Event-Anforderungen sofort mit qualifizierten Kandidaten aus Ihrer Talentdatenbank ab</p>
+        </div>
+
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-blue-400 text-2xl">trending_up</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-blue-400">Daten-Intelligenz</h3>
+          <p class="text-sm text-slate-400">Gewinnen Sie Erkenntnisse aus kombinierten Analysen über Events und Einstellungen für bessere Entscheidungen</p>
+        </div>
+
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-purple-400 text-2xl">autorenew</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-purple-400">Workflow-Automatisierung</h3>
+          <p class="text-sm text-slate-400">Erstellen Sie automatisch Stellenausschreibungen basierend auf Event-Anforderungen und Fristen</p>
+        </div>
+
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-cyan-400 text-2xl">group_work</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-cyan-400">Einheitliche Zusammenarbeit</h3>
+          <p class="text-sm text-slate-400">Event-Planer und HR-Teams arbeiten nahtlos auf derselben Plattform zusammen</p>
+        </div>
+
+        <div class="glass rounded-xl p-6 hover-glow">
+          <div class="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-red-400 text-2xl">psychology</span>
+          </div>
+          <h3 class="text-lg font-bold mb-2 text-red-400">Intelligentes Matching</h3>
+          <p class="text-sm text-slate-400">KI-gestützte Algorithmen gleichen Event-Bedürfnisse mit den am besten passenden Kandidaten aus Ihrem Talentpool ab</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 glass border-t border-slate-700/50 diagonal-stripes">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center">
+        <div class="flex items-center justify-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <span class="material-symbols-outlined text-white">integration_instructions</span>
+          </div>
+          <span class="text-xl font-bold gradient-text">Veyra Plattform</span>
+        </div>
+        <p class="text-slate-400 text-sm mb-6">
+          Integrierte Event-Planungs- & Stellenausschreibungs-Lösungen
+        </p>
+        <div class="flex items-center justify-center gap-6 text-xs text-slate-500">
+          <span>&copy; 2025 Veyra Plattform</span>
+          <span>•</span>
+          <a href="#" class="hover:text-blue-400 transition-colors">Dokumentation</a>
+          <span>•</span>
+          <a href="#" class="hover:text-purple-400 transition-colors">API-Referenz</a>
+          <span>•</span>
+          <a href="#" class="hover:text-cyan-400 transition-colors">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add loading state to iframes
+    document.querySelectorAll('.iframe-container iframe').forEach(iframe => {
+      iframe.addEventListener('load', function() {
+        this.style.opacity = '1';
+      });
+      iframe.style.opacity = '0';
+      iframe.style.transition = 'opacity 0.5s ease-in-out';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talentpool - Veyra Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            arctic: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .diagonal-stripes {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+    }
+
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.5);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .panel-shadow {
+      box-shadow:
+        0 4px 6px -1px rgba(59, 130, 246, 0.1),
+        0 2px 4px -1px rgba(59, 130, 246, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .hover-glow {
+      transition: all 0.3s ease;
+    }
+
+    .hover-glow:hover {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .drag-handle {
+      cursor: grab;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .tab-active {
+      background: rgba(59, 130, 246, 0.2);
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .panel-content {
+      font-size: 0.75rem;
+    }
+
+    .property-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .property-label {
+      color: #94a3b8;
+      font-size: 0.7rem;
+    }
+
+    .property-value {
+      color: #60a5fa;
+      font-size: 0.7rem;
+      font-family: monospace;
+    }
+
+    .section-header {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .talent-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .talent-card:hover {
+      transform: translateX(4px);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .talent-card.selected {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: #3b82f6;
+    }
+
+    .status-available {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-busy {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-pending {
+      background: rgba(234, 179, 8, 0.2);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .rating-star {
+      color: #facc15;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.625rem;
+      background: rgba(59, 130, 246, 0.1);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 overflow-hidden h-screen">
+  <!-- Main Container -->
+  <div class="h-screen flex">
+    <!-- Sidebar Navigation -->
+    <aside class="w-20 glass border-r border-slate-700/50 flex flex-col items-center py-6 gap-4 diagonal-stripes">
+      <!-- Logo -->
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 hover-glow cursor-pointer">
+        <span class="material-symbols-outlined text-white text-2xl">groups</span>
+      </div>
+
+      <!-- Tool Icons -->
+      <div class="flex flex-col gap-3 flex-1">
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative bg-blue-500/20">
+          <span class="material-symbols-outlined text-blue-400">person_search</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Talentsuche
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-purple-400">calendar_month</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Verfügbarkeit
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-green-400">event_available</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Buchungen
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-yellow-400">star</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Bewertungen
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-cyan-400">badge</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Zertifikate
+          </div>
+        </div>
+
+        <div class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-red-400">analytics</span>
+          <div class="absolute left-full ml-2 px-3 py-1.5 rounded-lg bg-slate-800 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+            Analytics
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="flex flex-col gap-3">
+        <div class="w-0.5 h-8 bg-slate-700/50 mx-auto"></div>
+        <button class="w-12 h-12 rounded-lg glass hover-glow cursor-pointer flex items-center justify-center group relative">
+          <span class="material-symbols-outlined text-slate-400">settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Bar -->
+      <header class="h-16 glass border-b border-slate-700/50 flex items-center justify-between px-6 diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <h1 class="text-xl font-bold gradient-text">Talentpool Management</h1>
+          <div class="h-6 w-px bg-slate-700"></div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium border border-blue-500/20">
+              <span class="material-symbols-outlined text-xs align-middle mr-1">groups</span>
+              247 Talente
+            </span>
+            <span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-medium border border-green-500/20">
+              <span class="material-symbols-outlined text-xs align-middle mr-1">check_circle</span>
+              163 Verfügbar
+            </span>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 glass rounded-lg px-3 py-1.5">
+            <input type="text" placeholder="Suche nach Name, Skill..."
+                   class="bg-transparent border-none outline-none text-sm w-64 placeholder-slate-500">
+            <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
+          </div>
+
+          <div class="flex items-center gap-2 glass rounded-lg px-3 py-1.5">
+            <button class="px-3 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-medium hover:bg-blue-500/30 transition-colors">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">filter_list</span>
+              Filter
+            </button>
+            <button class="px-3 py-1 rounded bg-green-500/20 text-green-400 text-xs font-medium hover:bg-green-500/30 transition-colors">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">person_add</span>
+              Neu
+            </button>
+          </div>
+
+          <button class="w-10 h-10 rounded-lg glass hover:bg-slate-700/50 flex items-center justify-center transition-colors">
+            <span class="material-symbols-outlined">fullscreen</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Canvas Area -->
+      <div id="canvas" class="flex-1 relative overflow-hidden grid-bg cursor-grab active:cursor-grabbing">
+        <!-- Panels Container -->
+        <div id="panelsContainer" class="absolute inset-0 pointer-events-none" style="transform-origin: center; z-index: 10;">
+          <!-- Panels will be dynamically added here -->
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <footer class="h-10 glass border-t border-slate-700/50 flex items-center justify-between px-6 text-xs diagonal-stripes">
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">Panels: <span id="panelCount" class="text-blue-400 font-medium">0</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Ausgewählt: <span id="selectedCount" class="text-green-400 font-medium">0</span></span>
+          <div class="w-px h-4 bg-slate-700"></div>
+          <span class="text-slate-500">Zoom: <span id="zoomLevel" class="text-purple-400 font-medium">100%</span></span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="text-slate-500">Ansicht: <span class="text-blue-400 font-medium">Talentpool Übersicht</span></span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // State
+    let panelCounter = 1;
+    let zoom = 1;
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let selectedTalents = new Set();
+
+    const canvas = document.getElementById('canvas');
+    const panelsContainer = document.getElementById('panelsContainer');
+    const panelCount = document.getElementById('panelCount');
+    const selectedCount = document.getElementById('selectedCount');
+    const zoomLevel = document.getElementById('zoomLevel');
+
+    // Talent Data
+    const talents = [
+      {
+        id: 1,
+        name: 'Marcus Weber',
+        role: 'Lead Audio Engineer',
+        avatar: 'MW',
+        status: 'available',
+        rating: 4.9,
+        dayRate: '1200',
+        experience: '12 Jahre',
+        skills: ['DiGiCo', 'Meyer Sound', 'Dante', 'FOH'],
+        location: 'Berlin',
+        availability: '15.03.2025 - 20.03.2025',
+        completedJobs: 156,
+        languages: ['Deutsch', 'Englisch']
+      },
+      {
+        id: 2,
+        name: 'Sarah Johnson',
+        role: 'Lighting Designer',
+        avatar: 'SJ',
+        status: 'available',
+        rating: 4.8,
+        dayRate: '950',
+        experience: '8 Jahre',
+        skills: ['GrandMA3', 'Vectorworks', 'LED', 'Moving Heads'],
+        location: 'Hamburg',
+        availability: 'Sofort verfügbar',
+        completedJobs: 98,
+        languages: ['Deutsch', 'Englisch', 'Französisch']
+      },
+      {
+        id: 3,
+        name: 'Thomas Müller',
+        role: 'Video Technician',
+        avatar: 'TM',
+        status: 'busy',
+        rating: 4.7,
+        dayRate: '850',
+        experience: '6 Jahre',
+        skills: ['Resolume', 'LED Walls', 'Blackmagic', 'Streaming'],
+        location: 'München',
+        availability: 'Ab 01.04.2025',
+        completedJobs: 72,
+        languages: ['Deutsch']
+      },
+      {
+        id: 4,
+        name: 'Lisa Schmidt',
+        role: 'Stage Manager',
+        avatar: 'LS',
+        status: 'available',
+        rating: 5.0,
+        dayRate: '1100',
+        experience: '15 Jahre',
+        skills: ['Crew Management', 'Safety', 'Logistics', 'Planning'],
+        location: 'Frankfurt',
+        availability: '10.03.2025 - 25.03.2025',
+        completedJobs: 203,
+        languages: ['Deutsch', 'Englisch', 'Spanisch']
+      },
+      {
+        id: 5,
+        name: 'David Chen',
+        role: 'FOH Engineer',
+        avatar: 'DC',
+        status: 'available',
+        rating: 4.9,
+        dayRate: '1050',
+        experience: '10 Jahre',
+        skills: ['Yamaha', 'DiGiCo', 'Waves', 'Live Mixing'],
+        location: 'Köln',
+        availability: 'Flexibel',
+        completedJobs: 134,
+        languages: ['Deutsch', 'Englisch', 'Mandarin']
+      },
+      {
+        id: 6,
+        name: 'Anna Becker',
+        role: 'Backline Technician',
+        avatar: 'AB',
+        status: 'pending',
+        rating: 4.6,
+        dayRate: '750',
+        experience: '5 Jahre',
+        skills: ['Guitar Tech', 'Drum Tech', 'Bass', 'Keyboards'],
+        location: 'Stuttgart',
+        availability: 'Anfrage läuft',
+        completedJobs: 45,
+        languages: ['Deutsch', 'Englisch']
+      },
+      {
+        id: 7,
+        name: 'Michael Franz',
+        role: 'Monitor Engineer',
+        avatar: 'MF',
+        status: 'available',
+        rating: 4.8,
+        dayRate: '980',
+        experience: '9 Jahre',
+        skills: ['DiGiCo', 'In-Ear Monitoring', 'Wedges', 'RF'],
+        location: 'Dresden',
+        availability: '12.03.2025 - 18.03.2025',
+        completedJobs: 112,
+        languages: ['Deutsch', 'Englisch']
+      },
+      {
+        id: 8,
+        name: 'Julia Hoffmann',
+        role: 'Production Manager',
+        avatar: 'JH',
+        status: 'busy',
+        rating: 4.9,
+        dayRate: '1300',
+        experience: '14 Jahre',
+        skills: ['Budgeting', 'Contracts', 'Scheduling', 'Coordination'],
+        location: 'Berlin',
+        availability: 'Ab 15.04.2025',
+        completedJobs: 187,
+        languages: ['Deutsch', 'Englisch', 'Italienisch']
+      }
+    ];
+
+    // Panel Templates
+    const panelTemplates = {
+      'talent-list': {
+        title: 'Talentliste',
+        icon: 'list',
+        width: 450,
+        height: 700,
+        content: (talents) => `
+          <div class="p-4 space-y-2 overflow-y-auto h-full">
+            ${talents.map(talent => `
+              <div class="talent-card glass rounded-lg p-4 border border-slate-700 hover:border-blue-500 transition-all"
+                   data-talent-id="${talent.id}"
+                   onclick="selectTalent(${talent.id})">
+                <div class="flex items-start gap-3">
+                  <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold flex-shrink-0">
+                    ${talent.avatar}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between mb-1">
+                      <div>
+                        <h4 class="font-bold text-sm text-slate-100">${talent.name}</h4>
+                        <p class="text-xs text-slate-400">${talent.role}</p>
+                      </div>
+                      <span class="px-2 py-0.5 rounded-full text-xs status-${talent.status}">
+                        ${talent.status === 'available' ? 'Verfügbar' : talent.status === 'busy' ? 'Gebucht' : 'Anfrage'}
+                      </span>
+                    </div>
+                    <div class="flex items-center gap-1 mb-2">
+                      ${Array(5).fill(0).map((_, i) =>
+                        `<span class="material-symbols-outlined rating-star" style="font-size: 12px;">${i < Math.floor(talent.rating) ? 'star' : 'star_outline'}</span>`
+                      ).join('')}
+                      <span class="text-xs text-slate-400 ml-1">${talent.rating}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-slate-500 mb-2">
+                      <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">payments</span>
+                        €${talent.dayRate}/Tag
+                      </span>
+                      <span>•</span>
+                      <span class="flex items-center gap-1">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">location_on</span>
+                        ${talent.location}
+                      </span>
+                    </div>
+                    <div class="flex flex-wrap gap-1">
+                      ${talent.skills.slice(0, 3).map(skill =>
+                        `<span class="skill-tag">${skill}</span>`
+                      ).join('')}
+                      ${talent.skills.length > 3 ? `<span class="skill-tag">+${talent.skills.length - 3}</span>` : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `
+      },
+
+      'talent-detail': {
+        title: 'Talent Details',
+        icon: 'person',
+        width: 400,
+        height: 650,
+        content: (talent) => `
+          <div class="p-4 space-y-4">
+            <!-- Header -->
+            <div class="text-center pb-4 border-b border-slate-700">
+              <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-2xl mx-auto mb-3">
+                ${talent.avatar}
+              </div>
+              <h3 class="text-lg font-bold text-slate-100 mb-1">${talent.name}</h3>
+              <p class="text-sm text-slate-400 mb-2">${talent.role}</p>
+              <div class="flex items-center justify-center gap-1 mb-2">
+                ${Array(5).fill(0).map((_, i) =>
+                  `<span class="material-symbols-outlined rating-star" style="font-size: 16px;">${i < Math.floor(talent.rating) ? 'star' : 'star_outline'}</span>`
+                ).join('')}
+                <span class="text-sm text-slate-300 ml-2">${talent.rating} / 5.0</span>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs status-${talent.status}">
+                ${talent.status === 'available' ? 'Verfügbar' : talent.status === 'busy' ? 'Gebucht' : 'Anfrage läuft'}
+              </span>
+            </div>
+
+            <!-- Info -->
+            <div class="section-header">Basisdaten</div>
+            <div class="property-row">
+              <span class="property-label">Tagessatz</span>
+              <span class="property-value">€${talent.dayRate}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Erfahrung</span>
+              <span class="property-value">${talent.experience}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Standort</span>
+              <span class="property-value">${talent.location}</span>
+            </div>
+            <div class="property-row">
+              <span class="property-label">Abgeschlossene Jobs</span>
+              <span class="property-value">${talent.completedJobs}</span>
+            </div>
+
+            <!-- Availability -->
+            <div class="section-header">Verfügbarkeit</div>
+            <div class="bg-slate-800/50 rounded-lg p-3 text-xs">
+              <div class="flex items-center gap-2 text-slate-300">
+                <span class="material-symbols-outlined text-green-400">event_available</span>
+                <span>${talent.availability}</span>
+              </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="section-header">Skills & Kompetenzen</div>
+            <div class="flex flex-wrap gap-2">
+              ${talent.skills.map(skill =>
+                `<span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">${skill}</span>`
+              ).join('')}
+            </div>
+
+            <!-- Languages -->
+            <div class="section-header">Sprachen</div>
+            <div class="flex flex-wrap gap-2">
+              ${talent.languages.map(lang =>
+                `<span class="px-2 py-1 rounded text-xs bg-purple-500/10 text-purple-400 border border-purple-500/20">${lang}</span>`
+              ).join('')}
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-2 pt-4">
+              <button class="flex-1 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-sm align-middle mr-1">event</span>
+                Buchen
+              </button>
+              <button class="flex-1 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-sm align-middle mr-1">mail</span>
+                Kontakt
+              </button>
+            </div>
+          </div>
+        `
+      },
+
+      'availability-calendar': {
+        title: 'Verfügbarkeitskalender',
+        icon: 'calendar_month',
+        width: 500,
+        height: 600,
+        content: `
+          <div class="p-4 space-y-4">
+            <div class="section-header">März 2025</div>
+            <div class="grid grid-cols-7 gap-1 text-center">
+              ${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(day =>
+                `<div class="text-xs font-bold text-slate-400 p-2">${day}</div>`
+              ).join('')}
+              ${Array(31).fill(0).map((_, i) => {
+                const day = i + 1;
+                const isAvailable = Math.random() > 0.3;
+                const isSelected = day >= 15 && day <= 20;
+                return `
+                  <div class="aspect-square flex items-center justify-center text-xs rounded cursor-pointer transition-all
+                    ${isSelected ? 'bg-blue-500 text-white font-bold' :
+                      isAvailable ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' :
+                      'bg-red-500/20 text-red-400 line-through'}">
+                    ${day}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="section-header">Legende</div>
+            <div class="space-y-2 text-xs">
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-slate-800"></div>
+                <span class="text-slate-400">Verfügbar</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-red-500/20"></div>
+                <span class="text-slate-400">Gebucht</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-blue-500"></div>
+                <span class="text-slate-400">Ausgewählt</span>
+              </div>
+            </div>
+
+            <div class="section-header">Gebuchte Events</div>
+            <div class="space-y-2">
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="material-symbols-outlined text-purple-400 text-sm">event</span>
+                  <span class="text-xs font-bold text-slate-200">Tech Conference Berlin</span>
+                </div>
+                <p class="text-xs text-slate-400">05.03 - 07.03.2025</p>
+              </div>
+              <div class="bg-slate-800/50 rounded-lg p-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="material-symbols-outlined text-purple-400 text-sm">event</span>
+                  <span class="text-xs font-bold text-slate-200">Music Festival Hamburg</span>
+                </div>
+                <p class="text-xs text-slate-400">22.03 - 24.03.2025</p>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      'filter-panel': {
+        title: 'Filter & Suche',
+        icon: 'filter_list',
+        width: 350,
+        height: 550,
+        content: `
+          <div class="p-4 space-y-4">
+            <div class="section-header">Rolle</div>
+            <div class="space-y-2">
+              ${['Audio Engineer', 'Lighting Designer', 'Video Tech', 'Stage Manager', 'Production Manager'].map(role => `
+                <label class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-800/30 p-2 rounded">
+                  <input type="checkbox" class="w-4 h-4">
+                  <span class="text-slate-300">${role}</span>
+                </label>
+              `).join('')}
+            </div>
+
+            <div class="section-header">Status</div>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-800/30 p-2 rounded">
+                <input type="checkbox" class="w-4 h-4" checked>
+                <span class="text-slate-300">Verfügbar</span>
+              </label>
+              <label class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-800/30 p-2 rounded">
+                <input type="checkbox" class="w-4 h-4">
+                <span class="text-slate-300">Gebucht</span>
+              </label>
+              <label class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-800/30 p-2 rounded">
+                <input type="checkbox" class="w-4 h-4">
+                <span class="text-slate-300">Anfrage läuft</span>
+              </label>
+            </div>
+
+            <div class="section-header">Tagessatz (€)</div>
+            <div class="space-y-2">
+              <input type="range" min="500" max="2000" step="50" value="1200"
+                     class="w-full accent-blue-500">
+              <div class="flex justify-between text-xs text-slate-400">
+                <span>€500</span>
+                <span class="text-blue-400 font-bold">€1200</span>
+                <span>€2000</span>
+              </div>
+            </div>
+
+            <div class="section-header">Standort</div>
+            <select class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+              <option>Alle Standorte</option>
+              <option>Berlin</option>
+              <option>Hamburg</option>
+              <option>München</option>
+              <option>Köln</option>
+              <option>Frankfurt</option>
+            </select>
+
+            <div class="section-header">Bewertung</div>
+            <div class="space-y-2">
+              ${[5, 4, 3].map(rating => `
+                <label class="flex items-center gap-2 text-xs cursor-pointer hover:bg-slate-800/30 p-2 rounded">
+                  <input type="checkbox" class="w-4 h-4">
+                  <div class="flex items-center gap-1">
+                    ${Array(rating).fill(0).map(() =>
+                      `<span class="material-symbols-outlined rating-star" style="font-size: 12px;">star</span>`
+                    ).join('')}
+                    <span class="text-slate-400 ml-1">& höher</span>
+                  </div>
+                </label>
+              `).join('')}
+            </div>
+
+            <button class="w-full px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">check</span>
+              Filter anwenden
+            </button>
+          </div>
+        `
+      },
+
+      'booking-summary': {
+        title: 'Buchungsübersicht',
+        icon: 'shopping_cart',
+        width: 400,
+        height: 500,
+        content: `
+          <div class="p-4 space-y-4">
+            <div class="section-header">Ausgewählte Talente</div>
+            <div id="selectedTalentsList" class="space-y-2 text-xs text-slate-400">
+              <p class="text-center py-8">Keine Talente ausgewählt</p>
+            </div>
+
+            <div class="section-header">Buchungszeitraum</div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-xs text-slate-400 mb-1 block">Von</label>
+                <input type="date" value="2025-03-15"
+                       class="w-full px-2 py-1.5 rounded bg-slate-800/50 border border-slate-700 text-xs">
+              </div>
+              <div>
+                <label class="text-xs text-slate-400 mb-1 block">Bis</label>
+                <input type="date" value="2025-03-20"
+                       class="w-full px-2 py-1.5 rounded bg-slate-800/50 border border-slate-700 text-xs">
+              </div>
+            </div>
+
+            <div class="section-header">Kosten</div>
+            <div class="bg-slate-800/50 rounded-lg p-3">
+              <div class="property-row">
+                <span class="property-label">Arbeitstage</span>
+                <span class="property-value">6 Tage</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Talente</span>
+                <span class="property-value" id="talentCountSummary">0</span>
+              </div>
+              <div class="property-row">
+                <span class="property-label">Tagessatz (Ø)</span>
+                <span class="property-value" id="avgDayRate">€0</span>
+              </div>
+              <div class="w-full h-px bg-slate-700 my-2"></div>
+              <div class="property-row">
+                <span class="property-label font-bold text-slate-200">Gesamt</span>
+                <span class="property-value text-green-400 font-bold text-base" id="totalCost">€0</span>
+              </div>
+            </div>
+
+            <button class="w-full px-4 py-3 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30 transition-colors font-medium">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">event_available</span>
+              Buchung abschließen
+            </button>
+          </div>
+        `
+      }
+    };
+
+    // Auto-create initial layout on load
+    window.addEventListener('load', () => {
+      createInitialLayout();
+    });
+
+    function createInitialLayout() {
+      const layouts = [
+        { type: 'filter-panel', x: 50, y: 50 },
+        { type: 'talent-list', x: 430, y: 50, data: talents },
+        { type: 'availability-calendar', x: 910, y: 50 },
+        { type: 'booking-summary', x: 910, y: 680 },
+      ];
+
+      layouts.forEach((layout, index) => {
+        setTimeout(() => {
+          if (layout.data) {
+            createPanelWithData(layout.type, layout.x, layout.y, layout.data);
+          } else {
+            createPanel(layout.type, layout.x, layout.y);
+          }
+        }, index * 150);
+      });
+    }
+
+    // Select talent function
+    function selectTalent(id) {
+      const talent = talents.find(t => t.id === id);
+      if (!talent) return;
+
+      // Toggle selection
+      if (selectedTalents.has(id)) {
+        selectedTalents.delete(id);
+      } else {
+        selectedTalents.add(id);
+      }
+
+      // Update UI
+      document.querySelectorAll('.talent-card').forEach(card => {
+        const cardId = parseInt(card.dataset.talentId);
+        if (selectedTalents.has(cardId)) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+
+      // Update selected count
+      selectedCount.textContent = selectedTalents.size;
+
+      // Update booking summary
+      updateBookingSummary();
+
+      // Show talent detail
+      if (selectedTalents.has(id)) {
+        showTalentDetail(talent);
+      }
+    }
+
+    function updateBookingSummary() {
+      const selectedTalentsList = document.getElementById('selectedTalentsList');
+      const talentCountSummary = document.getElementById('talentCountSummary');
+      const avgDayRate = document.getElementById('avgDayRate');
+      const totalCost = document.getElementById('totalCost');
+
+      if (!selectedTalentsList) return;
+
+      if (selectedTalents.size === 0) {
+        selectedTalentsList.innerHTML = '<p class="text-center py-8">Keine Talente ausgewählt</p>';
+        talentCountSummary.textContent = '0';
+        avgDayRate.textContent = '€0';
+        totalCost.textContent = '€0';
+        return;
+      }
+
+      const selected = talents.filter(t => selectedTalents.has(t.id));
+      const avgRate = selected.reduce((sum, t) => sum + parseInt(t.dayRate), 0) / selected.length;
+      const total = selected.reduce((sum, t) => sum + parseInt(t.dayRate), 0) * 6; // 6 days
+
+      selectedTalentsList.innerHTML = selected.map(t => `
+        <div class="flex items-center justify-between bg-slate-800/50 rounded p-2">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-bold">
+              ${t.avatar}
+            </div>
+            <div>
+              <div class="font-bold text-slate-200">${t.name}</div>
+              <div class="text-xs text-slate-400">${t.role}</div>
+            </div>
+          </div>
+          <button onclick="selectTalent(${t.id})" class="text-red-400 hover:text-red-300">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      `).join('');
+
+      talentCountSummary.textContent = selected.length;
+      avgDayRate.textContent = '€' + Math.round(avgRate).toLocaleString('de-DE');
+      totalCost.textContent = '€' + total.toLocaleString('de-DE');
+    }
+
+    function showTalentDetail(talent) {
+      // Remove existing detail panels
+      document.querySelectorAll('[data-panel-type="talent-detail"]').forEach(p => p.remove());
+
+      // Create new detail panel
+      const x = 1440;
+      const y = 50;
+      createPanelWithData('talent-detail', x, y, talent);
+    }
+
+    // Zoom functions
+    function updateTransform() {
+      panelsContainer.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+      zoomLevel.textContent = Math.round(zoom * 100) + '%';
+    }
+
+    // Panning
+    canvas.addEventListener('mousedown', (e) => {
+      if (e.button === 1 || (e.button === 0 && e.target === canvas)) {
+        e.preventDefault();
+        isPanning = true;
+        panStartX = e.clientX - panX;
+        panStartY = e.clientY - panY;
+        canvas.style.cursor = 'grabbing';
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isPanning) {
+        panX = e.clientX - panStartX;
+        panY = e.clientY - panStartY;
+        updateTransform();
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isPanning = false;
+      canvas.style.cursor = 'grab';
+    });
+
+    // Zoom with wheel
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      zoom = Math.max(0.3, Math.min(3, zoom + delta));
+      updateTransform();
+    }, { passive: false });
+
+    // Create panel
+    function createPanel(type, x, y) {
+      const template = panelTemplates[type];
+      if (!template) return;
+
+      const panel = document.createElement('div');
+      panel.className = 'absolute glass rounded-xl overflow-hidden panel-shadow pointer-events-auto';
+      panel.style.left = x + 'px';
+      panel.style.top = y + 'px';
+      panel.style.width = template.width + 'px';
+      panel.style.height = template.height + 'px';
+      panel.dataset.panelType = type;
+
+      panel.innerHTML = `
+        <div class="h-full flex flex-col">
+          <div class="drag-handle border-b border-slate-700/50 diagonal-stripes bg-slate-800/30 px-4 py-2 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-blue-400 text-lg">${template.icon}</span>
+              <span class="font-semibold text-sm">${template.title}</span>
+            </div>
+            <button class="w-7 h-7 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors"
+                    onclick="this.closest('.absolute').remove(); updatePanelCount();">
+              <span class="material-symbols-outlined text-sm text-red-400">close</span>
+            </button>
+          </div>
+          <div class="flex-1 overflow-y-auto panel-content">
+            ${template.content}
+          </div>
+        </div>
+      `;
+
+      makeDraggable(panel);
+      panelsContainer.appendChild(panel);
+      updatePanelCount();
+    }
+
+    function createPanelWithData(type, x, y, data) {
+      const template = panelTemplates[type];
+      if (!template) return;
+
+      const panel = document.createElement('div');
+      panel.className = 'absolute glass rounded-xl overflow-hidden panel-shadow pointer-events-auto';
+      panel.style.left = x + 'px';
+      panel.style.top = y + 'px';
+      panel.style.width = template.width + 'px';
+      panel.style.height = template.height + 'px';
+      panel.dataset.panelType = type;
+
+      panel.innerHTML = `
+        <div class="h-full flex flex-col">
+          <div class="drag-handle border-b border-slate-700/50 diagonal-stripes bg-slate-800/30 px-4 py-2 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-blue-400 text-lg">${template.icon}</span>
+              <span class="font-semibold text-sm">${template.title}</span>
+            </div>
+            <button class="w-7 h-7 rounded hover:bg-slate-700/50 flex items-center justify-center transition-colors"
+                    onclick="this.closest('.absolute').remove(); updatePanelCount();">
+              <span class="material-symbols-outlined text-sm text-red-400">close</span>
+            </button>
+          </div>
+          <div class="flex-1 overflow-y-auto panel-content">
+            ${template.content(data)}
+          </div>
+        </div>
+      `;
+
+      makeDraggable(panel);
+      panelsContainer.appendChild(panel);
+      updatePanelCount();
+    }
+
+    function makeDraggable(panel) {
+      const handle = panel.querySelector('.drag-handle');
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      handle.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseInt(panel.style.left);
+        initialTop = parseInt(panel.style.top);
+        panel.style.zIndex = 1000;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = (e.clientX - startX) / zoom;
+        const dy = (e.clientY - startY) / zoom;
+        panel.style.left = (initialLeft + dx) + 'px';
+        panel.style.top = (initialTop + dy) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    }
+
+    function updatePanelCount() {
+      panelCount.textContent = document.querySelectorAll('#panelsContainer > .absolute').length;
+    }
+
+    updatePanelCount();
+  </script>
+</body>
+</html>

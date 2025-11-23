@@ -240,7 +240,7 @@
           <div class="h-6 w-px bg-slate-700"></div>
           <div class="flex items-center gap-2">
             <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium border border-blue-500/20">
-              TechCorp AG
+              EventHub Productions
             </span>
             <span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-xs font-medium border border-yellow-500/20">
               DRAFT
@@ -322,7 +322,7 @@
               <label class="block text-xs font-medium text-slate-300 mb-1">Job Title *</label>
               <input type="text"
                      id="jobTitle"
-                     value="Senior Software Engineer (m/w/d)"
+                     value="Lead Audio Engineer (Freelancer)"
                      onchange="updatePreview()"
                      class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
             </div>
@@ -332,20 +332,20 @@
               <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Department</label>
                 <select id="department" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
-                  <option>Software Development</option>
-                  <option>DevOps</option>
-                  <option>Data Engineering</option>
-                  <option>Product Management</option>
-                  <option>Design</option>
+                  <option>Audio Engineering</option>
+                  <option>Event Production</option>
+                  <option>Technical Services</option>
+                  <option>Live Sound</option>
+                  <option>Broadcast Audio</option>
                 </select>
               </div>
               <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">Employment Type</label>
                 <select id="employmentType" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
+                  <option selected>Freelance/Contract</option>
                   <option>Full-time</option>
                   <option>Part-time</option>
-                  <option>Contract</option>
-                  <option>Internship</option>
+                  <option>Project-based</option>
                 </select>
               </div>
             </div>
@@ -356,17 +356,17 @@
                 <label class="block text-xs font-medium text-slate-300 mb-1">Location</label>
                 <input type="text"
                        id="location"
-                       value="Zürich, Switzerland"
+                       value="Grand Convention Center, New York"
                        onchange="updatePreview()"
                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Remote Options</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Work Model</label>
                 <select id="remoteOptions" onchange="updatePreview()" class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
-                  <option>Hybrid (2 days office)</option>
-                  <option>On-site</option>
-                  <option>Fully Remote</option>
-                  <option>Flexible</option>
+                  <option selected>On-site (Event Location)</option>
+                  <option>Hybrid</option>
+                  <option>Multi-venue</option>
+                  <option>Travel Required</option>
                 </select>
               </div>
             </div>
@@ -374,18 +374,18 @@
             <!-- Salary Range -->
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Salary From (CHF)</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Day Rate From (USD)</label>
                 <input type="number"
                        id="salaryFrom"
-                       value="100000"
+                       value="800"
                        onchange="updatePreview()"
                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Salary To (CHF)</label>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Day Rate To (USD)</label>
                 <input type="number"
                        id="salaryTo"
-                       value="140000"
+                       value="1200"
                        onchange="updatePreview()"
                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">
               </div>
@@ -397,7 +397,7 @@
               <textarea id="jobSummary"
                         rows="4"
                         onchange="updatePreview()"
-                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">Wir suchen einen erfahrenen Software Engineer für unser agiles Entwicklungsteam. Sie entwickeln innovative Cloud-Lösungen und arbeiten mit modernsten Technologien.</textarea>
+                        class="w-full px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm focus:border-blue-500 focus:outline-none">We are seeking an experienced Lead Audio Engineer for our Corporate Annual Summit 2025. You will oversee all audio aspects of the event, manage the audio team, and ensure flawless sound delivery for 500+ attendees.</textarea>
             </div>
 
             <!-- Key Responsibilities -->
@@ -405,19 +405,19 @@
               <label class="block text-xs font-medium text-slate-300 mb-1">Key Responsibilities</label>
               <div class="space-y-2">
                 <div class="flex gap-2">
-                  <input type="text" value="Entwicklung von Microservices mit Java/Spring Boot" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <input type="text" value="Design and implement comprehensive audio system for main hall" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
                   <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <span class="material-symbols-outlined text-sm">delete</span>
                   </button>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" value="Design und Implementierung von RESTful APIs" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <input type="text" value="Operate FOH and monitor mixing consoles (DiGiCo SD12)" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
                   <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <span class="material-symbols-outlined text-sm">delete</span>
                   </button>
                 </div>
                 <div class="flex gap-2">
-                  <input type="text" value="Code Reviews und Mentoring von Junior Developers" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
+                  <input type="text" value="Supervise audio crew and coordinate with technical directors" class="flex-1 px-3 py-2 rounded bg-slate-800/50 border border-slate-700 text-sm">
                   <button class="px-3 py-2 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30">
                     <span class="material-symbols-outlined text-sm">delete</span>
                   </button>
@@ -443,7 +443,7 @@
                 <label class="block text-xs font-medium text-slate-300 mb-1">Job ID</label>
                 <input type="text"
                        id="jobId"
-                       value="TC-2025-SE-001"
+                       value="EVENT-2025-AE-001"
                        readonly
                        class="w-full px-3 py-2 rounded bg-slate-900/50 border border-slate-700 text-sm text-slate-500">
               </div>
@@ -477,17 +477,17 @@
                   <div class="flex items-center justify-between mb-6">
                     <div class="flex items-center gap-4">
                       <div class="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center text-2xl font-bold">
-                        TC
+                        EH
                       </div>
                       <div>
-                        <h1 class="text-2xl font-bold">TechCorp AG</h1>
-                        <p class="text-sm opacity-90">Innovation through Technology</p>
+                        <h1 class="text-2xl font-bold">EventHub Productions</h1>
+                        <p class="text-sm opacity-90">Professional Event Management</p>
                       </div>
                     </div>
                     <div class="flex items-center gap-3">
                       <a href="#" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">Home</a>
-                      <a href="#" class="px-4 py-2 bg-white/20 rounded-lg text-sm">Karriere</a>
-                      <a href="#" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">Über uns</a>
+                      <a href="#" class="px-4 py-2 bg-white/20 rounded-lg text-sm">Careers</a>
+                      <a href="#" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-sm">About</a>
                     </div>
                   </div>
                 </div>
@@ -498,36 +498,36 @@
                 <!-- Breadcrumbs -->
                 <div class="text-xs text-gray-500 mb-4">
                   <a href="#" class="hover:text-blue-600">Home</a> /
-                  <a href="#" class="hover:text-blue-600">Karriere</a> /
-                  <span class="text-gray-900" id="breadcrumbTitle">Senior Software Engineer (m/w/d)</span>
+                  <a href="#" class="hover:text-blue-600">Careers</a> /
+                  <span class="text-gray-900" id="breadcrumbTitle">Lead Audio Engineer (Freelancer)</span>
                 </div>
 
                 <!-- Job Header Card -->
                 <div class="job-card bg-white rounded-xl shadow-lg p-8 mb-6" style="--brand-primary: #3b82f6;">
                   <div class="flex items-start justify-between mb-4">
                     <div class="flex-1">
-                      <h1 id="previewTitle" class="text-3xl font-bold text-gray-900 mb-2">Senior Software Engineer (m/w/d)</h1>
+                      <h1 id="previewTitle" class="text-3xl font-bold text-gray-900 mb-2">Lead Audio Engineer (Freelancer)</h1>
                       <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
                         <div class="flex items-center gap-1">
                           <span class="material-symbols-outlined text-base">location_on</span>
-                          <span id="previewLocation">Zürich, Switzerland</span>
+                          <span id="previewLocation">Grand Convention Center, New York</span>
                         </div>
                         <div class="flex items-center gap-1">
                           <span class="material-symbols-outlined text-base">work</span>
-                          <span id="previewDepartment">Software Development</span>
+                          <span id="previewDepartment">Audio Engineering</span>
                         </div>
                         <div class="flex items-center gap-1">
                           <span class="material-symbols-outlined text-base">schedule</span>
-                          <span id="previewType">Full-time</span>
+                          <span id="previewType">Freelance/Contract</span>
                         </div>
                         <div class="flex items-center gap-1">
                           <span class="material-symbols-outlined text-base">home</span>
-                          <span id="previewRemote">Hybrid (2 days office)</span>
+                          <span id="previewRemote">On-site (Event Location)</span>
                         </div>
                       </div>
                     </div>
                     <button class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                      Jetzt bewerben
+                      Apply Now
                     </button>
                   </div>
 
@@ -536,9 +536,9 @@
                     <div class="flex items-center gap-2">
                       <span class="material-symbols-outlined text-blue-600">payments</span>
                       <div>
-                        <div class="text-xs text-gray-600">Salary Range</div>
+                        <div class="text-xs text-gray-600">Day Rate</div>
                         <div class="text-lg font-bold text-gray-900">
-                          <span id="previewSalaryFrom">100'000</span> - <span id="previewSalaryTo">140'000</span> CHF/year
+                          $<span id="previewSalaryFrom">800</span> - $<span id="previewSalaryTo">1,200</span>/day
                         </div>
                       </div>
                     </div>
@@ -547,27 +547,27 @@
 
                 <!-- Job Description -->
                 <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
-                  <h2 class="text-xl font-bold text-gray-900 mb-4">Über die Position</h2>
+                  <h2 class="text-xl font-bold text-gray-900 mb-4">About the Position</h2>
                   <p id="previewSummary" class="text-gray-700 leading-relaxed">
-                    Wir suchen einen erfahrenen Software Engineer für unser agiles Entwicklungsteam. Sie entwickeln innovative Cloud-Lösungen und arbeiten mit modernsten Technologien.
+                    We are seeking an experienced Lead Audio Engineer for our Corporate Annual Summit 2025. You will oversee all audio aspects of the event, manage the audio team, and ensure flawless sound delivery for 500+ attendees.
                   </p>
                 </div>
 
                 <!-- Key Responsibilities -->
                 <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
-                  <h2 class="text-xl font-bold text-gray-900 mb-4">Ihre Aufgaben</h2>
+                  <h2 class="text-xl font-bold text-gray-900 mb-4">Key Responsibilities</h2>
                   <ul class="space-y-2 text-gray-700">
                     <li class="flex items-start gap-2">
                       <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
-                      <span>Entwicklung von Microservices mit Java/Spring Boot</span>
+                      <span>Design and implement comprehensive audio system for main hall</span>
                     </li>
                     <li class="flex items-start gap-2">
                       <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
-                      <span>Design und Implementierung von RESTful APIs</span>
+                      <span>Operate FOH and monitor mixing consoles (DiGiCo SD12)</span>
                     </li>
                     <li class="flex items-start gap-2">
                       <span class="material-symbols-outlined text-blue-600 text-base mt-0.5">check_circle</span>
-                      <span>Code Reviews und Mentoring von Junior Developers</span>
+                      <span>Supervise audio crew and coordinate with technical directors</span>
                     </li>
                   </ul>
                 </div>
@@ -576,7 +576,7 @@
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
                   <div class="flex items-center gap-2 text-yellow-800">
                     <span class="material-symbols-outlined">event</span>
-                    <span class="font-medium">Bewerbungsfrist: <span id="previewDeadline">31. März 2025</span></span>
+                    <span class="font-medium">Application Deadline: <span id="previewDeadline">March 31, 2025</span></span>
                   </div>
                 </div>
 
@@ -584,7 +584,7 @@
                 <div class="text-center">
                   <button class="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-bold text-lg">
                     <span class="material-symbols-outlined align-middle mr-2">send</span>
-                    Bewerbung einreichen
+                    Submit Application
                   </button>
                 </div>
               </div>
@@ -592,8 +592,8 @@
               <!-- Footer -->
               <div class="bg-gray-100 mt-12 py-8 px-8">
                 <div class="max-w-5xl mx-auto text-center text-sm text-gray-600">
-                  <p>&copy; 2025 TechCorp AG. Alle Rechte vorbehalten.</p>
-                  <p class="mt-2">Job ID: <span id="previewJobId">TC-2025-SE-001</span></p>
+                  <p>&copy; 2025 EventHub Productions. All rights reserved.</p>
+                  <p class="mt-2">Job ID: <span id="previewJobId">EVENT-2025-AE-001</span></p>
                 </div>
               </div>
             </div>
@@ -608,7 +608,7 @@
           <div class="w-px h-4 bg-slate-700"></div>
           <span class="text-slate-500">Last saved: <span class="text-blue-400 font-medium">Just now</span></span>
           <div class="w-px h-4 bg-slate-700"></div>
-          <span class="text-slate-500">Company: <span class="text-green-400 font-medium">TechCorp AG</span></span>
+          <span class="text-slate-500">Company: <span class="text-green-400 font-medium">EventHub Productions</span></span>
         </div>
 
         <div class="flex items-center gap-4">
@@ -638,8 +638,8 @@
       document.getElementById('previewRemote').textContent = document.getElementById('remoteOptions').value;
 
       // Update salary
-      const salaryFrom = parseInt(document.getElementById('salaryFrom').value).toLocaleString('de-CH');
-      const salaryTo = parseInt(document.getElementById('salaryTo').value).toLocaleString('de-CH');
+      const salaryFrom = parseInt(document.getElementById('salaryFrom').value).toLocaleString('en-US');
+      const salaryTo = parseInt(document.getElementById('salaryTo').value).toLocaleString('en-US');
       document.getElementById('previewSalaryFrom').textContent = salaryFrom;
       document.getElementById('previewSalaryTo').textContent = salaryTo;
 
@@ -648,7 +648,7 @@
 
       // Update deadline
       const deadline = new Date(document.getElementById('deadline').value);
-      const deadlineFormatted = deadline.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+      const deadlineFormatted = deadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       document.getElementById('previewDeadline').textContent = deadlineFormatted;
 
       // Update job ID
